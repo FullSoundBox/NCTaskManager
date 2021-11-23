@@ -1,12 +1,12 @@
 package mx.edu.j2se.camarillo.tasks;
 
 public class Task {
-	String taskTitle;
-	int startTime;
-	int endTime;
-	int taskInterval;
-	boolean taskActive;
-	boolean taskRepeatability;
+	private String taskTitle;
+	private int startTime;
+	private int endTime;
+	private int taskInterval;
+	private boolean taskActive;
+	private boolean taskRepeatability;
 
 	public Task(){
 		super();
@@ -18,10 +18,22 @@ public class Task {
 		taskRepeatability = false;
 	}
 
+	/**
+	 * Copies the parameters of another object
+	 */
+	public void Task(Task another){
+		this.taskTitle = another.taskTitle;
+		this.startTime = another.startTime;
+		this.endTime = another.endTime;
+		this.taskInterval = another.taskInterval;
+		this.taskActive = another.taskActive;
+		this.taskRepeatability = another.taskRepeatability;
+	}
+
+	/**
+	 * Creates a non-repetitive, un-active task.
+	 */
 	public Task(String title, int time) {
-		/**
-		 * Creates a non-repetitive, un-active task.
-		 */
 		this.taskTitle = title;
 		this.startTime = time;
 		this.endTime = time;
@@ -29,10 +41,10 @@ public class Task {
 		this.taskRepeatability = false;
 	}
 
+	/**
+	 * Creates a repetitive, un-active task
+	 */
 	public Task(String title, int start, int end, int interval) {
-		/**
-		 * Creates a repetitive, un-active task
-		 */
 		this.taskTitle = title;
 		this.startTime = start;
 		this.endTime = end;
@@ -41,114 +53,135 @@ public class Task {
 		this.taskRepeatability = true;
 	}
 
+	/**
+	 * Returns the task title
+	 */
 	public String getTitle() {
-		/**
-		 * Returns the task title
-		 */
 		return taskTitle;
 	}
 
+	/**
+	 * Sets the task title.
+	 */
 	public void setTitle(String title) {
-		/**
-		 * Sets the task title.
-		 */
 		taskTitle = title;
 	}
 
+	/**
+	 * Tells if the task is active or not
+	 */
 	public boolean isActive() {
-		/**
-		 * Tells if the task is active or not
-		 */
 		return taskActive;
 	}
 
+	/**
+	 * Sets the state of the tasks. Parameter may be true or false.
+	 */
 	public void setActive(boolean active) {
-		/**
-		 * Sets the state of the tasks. Parameter may be true or false.
-		 */
 		taskActive = active;
 	}
 
+	/**
+	 * Returns the time of the non-repetitive task. If it is repetitive,
+	 * returns the start time of the task.
+	 */
 	public int getTime() {
-		/**
-		 * Returns the time of the non-repetitive task. If it is repetitive,
-		 * returns the start time of the task.
-		 */
 		return startTime;
 	}
 
+	/**
+	 * Sets the time of the non-repetitive task. If it is repetitive, the task is turned into
+	 * a non-repetitive task.
+	 */
 	public void setTime(int time) {
-		/**
-		 * Sets the time of the non-repetitive task. If it is repetitive, the task is turned into
-		 * a non-repetitive task.
-		 */
 		startTime = time;
 		endTime = time;
 		taskInterval = 0;
 		taskRepeatability = false;
 	}
 
+	/**
+	 * Returns the start time of a repetitive task. If it's a non-repetitive task
+	 * it returns the time of the task.
+	 */
 	public int getStartTime() {
-		/**
-		 * Returns the start time of a repetitive task. If it's a non-repetitive task
-		 * it returns the time of the task.
-		 */
 		return startTime;
 	}
 
+	/**
+	 * Returns the end time of a repetitive task. If it's a non-repetitive task
+	 * a warning is returned and getTime() should be used.
+	 */
 	public int getEndTime() {
-		/**
-		 * Returns the end time of a repetitive task. If it's a non-repetitive task
-		 * a warning is returned and getTime() should be used.
-		 */
 		return endTime;
 	}
 
+	/**Returns the repetition interval of the repetitive task. If it's a non-repetitive task
+	 * a value of zero is returned.
+	 */
 	public int getRepeatInterval(){
-		/**Returns the repetition interval of the repetitive task. If it's a non-repetitive task
-		 * a value of zero is returned.
-		 */
-		return 0;
+		return taskInterval;
 	}
 
+	/**
+	 * Sets the start and end time, and also the repetition interval of a repetitive task.
+	 * If it is a non-repetitive task, it's turned into a repetitive task.
+	 */
 	public void setTime(int start, int end, int interval) {
-		/**
-		 * Sets the start and end time, and aslo the repetition interval of a repetitive task.
-		 * If it is a non-repetitive task, it's turned into a repetitive task.
-		 */
+
 		startTime = start;
 		endTime = end;
 		taskInterval = interval;
 		taskRepeatability = true;
 	}
 
+	/**
+	 * Tells if a task is repetitive or non-repetitive
+	 */
 	public boolean isRepeated() {
-		/**
-		 * Tells if a task is repetitive or non-repetitive
-		 */
 		return taskRepeatability;
 	}
 
+	/**
+	 * Tells the next execution time of a task given a current time. If the task is
+	 * un-active, it returns -1. If after the specified time the task is not executed
+	 * anymore, this method returns a -1.
+	 */
 	public int nextTimeAfter (int current){
-		/**
-		 * Tells the next execution time of a task given a current time. If the task is
-		 * un-active, it returns -1. If after the specified time the task is not executed
-		 * anymore, this method returns a -1.
-		 */
 		if (taskActive == false) {
 			return -1;
 		}
 		else{
 			if (taskRepeatability==false) {
-				return ((startTime - current) >= 0) ? (startTime - current) : -1;
+				return (current <= startTime ? startTime : -1);
 			}
 			else{
-				return ((startTime - current) < 0 || (endTime - current) < 0) ? -1 :(startTime - current);
+				if(current>endTime){
+					return -1;
+				}
+				else {
+					int nextTime = startTime;
+					while(current>nextTime){nextTime += taskInterval;}
+					return (nextTime);
+				}
 			}
 		}
 	}
-	public static void main(String[] args) {
 
+	/**
+	 *
+	 * Returns the parameters of the object
+	 */
+	public String toString(){
+		String para = new String();
+			//para = this.taskTitle + ",\n" + this.startTime + ",\n" + this.endTime + ",\n" + this.taskInterval + ",\n" + this.taskActive;
+			para = "Title: " + this.taskTitle
+					+ ", Start Time: " + this.startTime
+					+ ", End Time: " + this.endTime
+					+ ", Interval: " + this.taskInterval
+					+ ", Active: " + this.taskActive
+					+ ", Repetitive: " + this.taskRepeatability;
+		return para;
 	}
 }
 

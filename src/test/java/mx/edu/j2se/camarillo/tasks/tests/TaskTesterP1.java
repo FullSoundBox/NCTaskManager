@@ -78,20 +78,23 @@ public class TaskTesterP1 {
     public void testNextTimeAfter(){
         Task taskOrdenarLibrero = new Task("Ordenar Librero", 26);//Non-repetitive
 
+        //Testing non-repetitive task
         Assert.assertEquals(-1,taskOrdenarLibrero.nextTimeAfter(23));// task is not active
         taskOrdenarLibrero.setActive(true);
-        Assert.assertEquals(0,taskOrdenarLibrero.nextTimeAfter(26)); //0 date same day as the task
-        Assert.assertEquals(3,taskOrdenarLibrero.nextTimeAfter(23)); //3 date before the task
+        Assert.assertEquals(26,taskOrdenarLibrero.nextTimeAfter(26)); //0 date same day as the task
+        Assert.assertEquals(26,taskOrdenarLibrero.nextTimeAfter(23)); //3 date before the task
         Assert.assertEquals(-1,taskOrdenarLibrero.nextTimeAfter(27)); //-1 date after the task
 
-        Task taskCalisthenics = new Task("Hacer Barras", 5, 12, 24);//Repetitive
+        Task taskCalisthenics = new Task("Hacer Barras", 5, 24, 3);//Repetitive
 
+        //Testing repetitive task
         Assert.assertEquals(-1,taskCalisthenics.nextTimeAfter(8)); //task is not active
         taskCalisthenics.setActive(true);
-        Assert.assertEquals(2,taskCalisthenics.nextTimeAfter(3));//task active, date before start
-        //Assert.assertEquals(2,taskCalisthenics.nextTimeAfter(3));//task active, between start and end time
-        //Assert.assertEquals(2,taskCalisthenics.nextTimeAfter(3));//task active, between start and end time
-        Assert.assertEquals(-1,taskCalisthenics.nextTimeAfter(13));//task active, after end time
+        Assert.assertEquals(5,taskCalisthenics.nextTimeAfter(3));//active, date before startTime
+        Assert.assertEquals(5,taskCalisthenics.nextTimeAfter(5));//active, date is the same as startTime
+        Assert.assertEquals(8,taskCalisthenics.nextTimeAfter(7));//active, between startTime and next execution
+        Assert.assertEquals(8,taskCalisthenics.nextTimeAfter(8));//active, same as next execution
+        Assert.assertEquals(-1,taskCalisthenics.nextTimeAfter(25));//active, after end time
     }
 
     public static void main(String[] args) {
