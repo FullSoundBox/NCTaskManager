@@ -22,6 +22,7 @@ public class Task {
 	 * Copies the parameters of another object
 	 */
 	public void Task(Task another){
+		if (another==null) {throw new NullPointerException("Task is empty");}
 		this.taskTitle = another.taskTitle;
 		this.startTime = another.startTime;
 		this.endTime = another.endTime;
@@ -33,7 +34,9 @@ public class Task {
 	/**
 	 * Creates a non-repetitive, un-active task.
 	 */
-	public Task(String title, int time) {
+	public Task(String title, int time) throws IllegalArgumentException {
+		if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
+
 		this.taskTitle = title;
 		this.startTime = time;
 		this.endTime = time;
@@ -44,7 +47,10 @@ public class Task {
 	/**
 	 * Creates a repetitive, un-active task
 	 */
-	public Task(String title, int start, int end, int interval) {
+	public Task(String title, int start, int end, int interval) throws IllegalArgumentException{
+		if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
+		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
+
 		this.taskTitle = title;
 		this.startTime = start;
 		this.endTime = end;
@@ -77,9 +83,7 @@ public class Task {
 	/**
 	 * Sets the state of the tasks. Parameter may be true or false.
 	 */
-	public void setActive(boolean active) {
-		taskActive = active;
-	}
+	public void setActive(boolean active) { taskActive = active; }
 
 	/**
 	 * Returns the time of the non-repetitive task. If it is repetitive,
@@ -93,7 +97,9 @@ public class Task {
 	 * Sets the time of the non-repetitive task. If it is repetitive, the task is turned into
 	 * a non-repetitive task.
 	 */
-	public void setTime(int time) {
+	public void setTime(int time) throws IllegalArgumentException{
+		if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
+
 		startTime = time;
 		endTime = time;
 		taskInterval = 0;
@@ -127,7 +133,9 @@ public class Task {
 	 * Sets the start and end time, and also the repetition interval of a repetitive task.
 	 * If it is a non-repetitive task, it's turned into a repetitive task.
 	 */
-	public void setTime(int start, int end, int interval) {
+	public void setTime(int start, int end, int interval) throws IllegalArgumentException{
+		if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
+		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
 
 		startTime = start;
 		endTime = end;
@@ -148,6 +156,8 @@ public class Task {
 	 * anymore, this method returns a -1.
 	 */
 	public int nextTimeAfter (int current){
+		if (current<=0) { throw new IllegalArgumentException("Current time must be positive");}
+
 		if (taskActive == false) {
 			return -1;
 		}
@@ -174,7 +184,6 @@ public class Task {
 	 */
 	public String toString(){
 		String para = new String();
-			//para = this.taskTitle + ",\n" + this.startTime + ",\n" + this.endTime + ",\n" + this.taskInterval + ",\n" + this.taskActive;
 			para = "Title: " + this.taskTitle
 					+ ", Start Time: " + this.startTime
 					+ ", End Time: " + this.endTime

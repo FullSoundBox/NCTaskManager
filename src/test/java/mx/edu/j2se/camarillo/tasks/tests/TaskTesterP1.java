@@ -11,53 +11,75 @@ import org.junit.Test;
  * @since <pre> November 15, 2021</pre>
  * @version 1.0
  */
-
 public class TaskTesterP1 {
 
+    /**
+     * Test task title setter and getter methods
+     */
     @Test
     public void testTitle(){
-        /**
-         * Test task title setter and getter methods
-         */
         Task taskOrdenarLibrero = new Task("Ordenar Librero", 12);
+        Task taskCalisthenics = new Task("Hacer Barras", 8, 12, 1);
 
         Assert.assertEquals("Ordenar Librero",taskOrdenarLibrero.getTitle());
         taskOrdenarLibrero.setTitle("Ordenar Escritorio");
         Assert.assertEquals("Ordenar Escritorio",taskOrdenarLibrero.getTitle());
+
+        Assert.assertEquals("Hacer Barras",taskCalisthenics.getTitle());
+        taskCalisthenics.setTitle("Correr en la Manana");
+        Assert.assertEquals("Correr en la Manana",taskCalisthenics.getTitle());
     }
 
+    /**
+     * Test non-repetitive task active status, time setters and getters and
+     * repetitive task transformation
+     */
     @Test
     public void testNonRepetitive(){
-        /**
-         * Test non-repetitive task active status, time setters and getters and
-         * repetitive task transformation
-         */
-
         Task taskOrdenarLibrero = new Task("Ordenar Librero", 12);
         //Active status
         Assert.assertFalse(taskOrdenarLibrero.isActive());
         taskOrdenarLibrero.setActive(true);
         Assert.assertTrue(taskOrdenarLibrero.isActive());
+        taskOrdenarLibrero.setActive(false);
+        Assert.assertFalse(taskOrdenarLibrero.isActive());
 
         //Time setters and getters
         Assert.assertEquals(12,taskOrdenarLibrero.getTime());
         taskOrdenarLibrero.setTime(11);
         Assert.assertEquals(11,taskOrdenarLibrero.getTime());
 
-        //TODO: Arreglar el nextTimeAfter
+        //Get repeat interval, being a non-repetitive, should return 0
+        Assert.assertEquals(0,taskOrdenarLibrero.getRepeatInterval());
     }
 
     @Test
     public void testRepetitive(){
+        Task taskCalisthenics = new Task("Hacer Barras", 8, 12, 2);
 
-        Task taskCalisthenics = new Task("Hacer Barras", 8, 9, 24);
-
+        //Test repetitive task if active or not
         Assert.assertFalse(taskCalisthenics.isActive());
         taskCalisthenics.setActive(true);
         Assert.assertTrue(taskCalisthenics.isActive());
+        taskCalisthenics.setActive(false);
+        Assert.assertFalse(taskCalisthenics.isActive());
 
+        //Repetitive task setTime and getTime
+        Assert.assertEquals(8,taskCalisthenics.getStartTime());
+        Assert.assertEquals(12,taskCalisthenics.getEndTime());
+        taskCalisthenics.setTime(9,15,3);
+        Assert.assertEquals(9,taskCalisthenics.getStartTime());
+        Assert.assertEquals(15,taskCalisthenics.getEndTime());
+
+        //Get repeat interval
+        Assert.assertEquals(3,taskCalisthenics.getRepeatInterval());
     }
 
+    /**
+     * This test verifies if the repeatability of task is modified when setTime method with more
+     * parameters is used. A non-repetitive task should turn into a repetitive task when startTime, endTime
+     * and execution interval are specified, and viceversa
+     */
     @Test
     public void testRepeated(){
         Task taskOrdenarLibrero = new Task("Ordenar Librero", 12);//Non-repetitive
@@ -74,6 +96,10 @@ public class TaskTesterP1 {
         Assert.assertFalse(taskCalisthenics.isRepeated());
     }
 
+    /**
+     * Verifying nextTimeAfter possible cases, when task are not active, when the current time is after task
+     * execution time, before execution time and between startTime and endTime.
+     */
     @Test
     public void testNextTimeAfter(){
         Task taskOrdenarLibrero = new Task("Ordenar Librero", 26);//Non-repetitive
@@ -95,11 +121,5 @@ public class TaskTesterP1 {
         Assert.assertEquals(8,taskCalisthenics.nextTimeAfter(7));//active, between startTime and next execution
         Assert.assertEquals(8,taskCalisthenics.nextTimeAfter(8));//active, same as next execution
         Assert.assertEquals(-1,taskCalisthenics.nextTimeAfter(25));//active, after end time
-    }
-
-    public static void main(String[] args) {
-        Task taskCalisthenics = new Task("Hacer Barras", 8, 9, 24);
-
-        System.out.println(taskCalisthenics.getTitle());
     }
 }

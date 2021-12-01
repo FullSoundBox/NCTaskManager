@@ -1,31 +1,24 @@
 package mx.edu.j2se.camarillo.tasks;
 
-public class ArrayTaskList {
-    private Task[] taskList = new Task[5];
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
-    /**
-     * Creates an Arrray  of undefined Tasks with Task() constructor
-     */
-    public ArrayTaskList(){
-        for (int i=0; i<taskList.length; i++) {
-            taskList[i] = new Task();
-        }
-    }
+public class ArrayTaskList {
+    private Task[] taskList = new Task[0];
 
     /**
      *
      * Looks for undefined task slot in the array, if found, rewrites the parameters of the object
      * with the task to add
      * @param task
+     * @throws NullPointerException if the Task reference is empty, this throws a NullPointerException
      */
-    public void add(Task task){
-        for (int i = 0; i < taskList.length; i++) {
-            if (taskList[i].getTitle()==null && taskList[i].getStartTime()==0){ //TODO: try to comparing the complete object
-                taskList[i].Task(task);
-                break;
-            }
-        }
-
+    public void add(Task task) throws NullPointerException{
+        if (task==null) {throw new NullPointerException("Empty link");}
+        Task[] dummy = new Task[taskList.length+1];
+        System.arraycopy(taskList,0,dummy,0,taskList.length);
+        dummy[taskList.length]=task;
+        taskList = dummy;
     }
 
     /**
@@ -35,10 +28,15 @@ public class ArrayTaskList {
      * @return true if task was found and erased
      */
     public boolean remove(Task task){
+        Task[] dummy = new Task[taskList.length-1];
         for (int i = 0; i < taskList.length; i++) {
-            if(taskList[i].getTitle()==task.getTitle()
-                    && taskList[i].getStartTime()==task.getTime()) {
-                taskList[i] = new Task();
+            //System.out.println(task);
+            //System.out.println("\t" + taskList[i]);
+            //System.out.println("\t" + i + "\t" +(taskList[i]==task));
+            if (taskList[i]==task){
+                System.arraycopy(taskList, 0, dummy, 0, i);
+                System.arraycopy(taskList, i+1, dummy, i, dummy.length-i);
+                taskList = dummy;
                 return true;
             }
         }
@@ -51,13 +49,7 @@ public class ArrayTaskList {
      * @return
      */
     public int size(){
-        int numberOfTasks=0;
-        for (int i=0; i<taskList.length;i++) {
-            if (taskList[i].getTitle()!=null && taskList[i].getStartTime()!=0) {
-                numberOfTasks++;
-            }
-        }
-        return numberOfTasks;
+        return taskList.length;
     }
 
     /**
@@ -65,7 +57,8 @@ public class ArrayTaskList {
      * @param index
      * @return taskList[index]
      */
-    public Task getTask(int index){
+    public Task getTask(int index) throws IndexOutOfBoundsException{
+        if (index>taskList.length-1 || index<0) {throw new IndexOutOfBoundsException("Index exceeds permissible limits of the list");}
         return taskList[index];
     }
 
@@ -78,14 +71,15 @@ public class ArrayTaskList {
      */
     public ArrayTaskList incoming(int from, int to){
         ArrayTaskList incomingTasks = new ArrayTaskList();
-        for (int i=0; i<incomingTasks.taskList.length; i++) {
-            taskList[i] = new Task();
+        for (Task task: taskList) {
+            if (task.isActive() == true && task.getStartTime()<=to) {
+                incomingTasks.add(task);
+            }
         }
 
-        for (int i=0 ; i<taskList.length ; i++) {
-            if (taskList[i].nextTimeAfter(from)>= from && taskList[i].nextTimeAfter(from)<=to){
-                incomingTasks.add(taskList[i]);
-            }
+        for (Task task: incomingTasks.taskList) {
+            int j = task.nextTimeAfter(from);
+            if(!(j>=from && j<=to)){incomingTasks.remove(task);}
         }
         return incomingTasks;
     }
