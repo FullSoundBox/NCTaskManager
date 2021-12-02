@@ -60,7 +60,7 @@ public class TaskListTesterP2 {
     @Test
     public void incomingTester(){
         ArrayTaskList taskListOne = new ArrayTaskList();
-        System.out.println("Number of tasks in the original array: " + taskListOne.size());
+        Assert.assertEquals(0,taskListOne.size());
 
         Task taskToAdd1 = new Task("task to Add 1",7);
         Task taskToAdd2 = new Task("task to Add 2",9,15,2);
@@ -79,20 +79,15 @@ public class TaskListTesterP2 {
         taskListOne.add(taskToAdd3);
         taskListOne.add(taskToAdd4);
         taskListOne.add(taskToAdd5);
-        System.out.println("Number of tasks in the original array: " + taskListOne.size());
-
-        System.out.println(taskListOne.getTask(0));
-        System.out.println(taskListOne.getTask(1));
-        System.out.println(taskListOne.getTask(2));
-        System.out.println(taskListOne.getTask(3));
-        System.out.println(taskListOne.getTask(4));
+        Assert.assertEquals(5,taskListOne.size());
 
         ArrayTaskList incomingNineToFive = new ArrayTaskList();
         incomingNineToFive = taskListOne.incoming(9,17);
+        /*
         System.out.println();
         System.out.println("Hay " + incomingNineToFive.size() + " Tareas de 9 a 5");
         System.out.println(incomingNineToFive.getTask(0));
-        System.out.println(incomingNineToFive.getTask(1));
+        System.out.println(incomingNineToFive.getTask(1));*/
 
         Assert.assertEquals(2,incomingNineToFive.size());
         Assert.assertEquals(taskToAdd2.toString(),incomingNineToFive.getTask(0).toString());

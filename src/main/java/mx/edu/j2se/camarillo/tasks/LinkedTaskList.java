@@ -1,16 +1,25 @@
 package mx.edu.j2se.camarillo.tasks;
 
 public class LinkedTaskList {
-    private Task[] taskList = new Task[5];  //TODO: redefine methods to fulfill practice requirements
+    private Node first;
+    private Node last;
 
     /**
      *
-     * Looks for undefined task slot in the array, if found, rewrites the parameters of the object
-     * with the task to add
+     * Adds a task to the last node in the linked list
      * @param task
      */
     public void add(Task task){
+        Node node = new Node();
+        node.setValue(task);
 
+        if (size() == 0) {
+            this.last = node;
+            this.first = node;
+        } else {
+            this.last.setPointer(node);
+            this.last = node;
+        }
     }
 
     /**
@@ -20,20 +29,49 @@ public class LinkedTaskList {
      * @return true if task was found and erased
      */
     public boolean remove(Task task){
-        if (true/*found*/)
-            return true;
-        else
-            return false;
+        int iteration = 0;
+        Node node = first;
+
+        while(node!=null) {
+            if (node.getPointer() == null && node == first) {//Empty list
+                first = null;
+                last = null;
+                return false;
+            } else if (node.getPointer()==last && (Task)node.getPointer().getValue()==task) {
+                node.setPointer(null);
+                last = node;
+                return true;}
+            else if ((Task)node.getValue()==task){
+                node.setValue(node.getPointer().getValue());
+                node.setPointer(node.getPointer());
+                if (node == first){
+                    this.first = node.getPointer();
+                }
+                if (node == last){
+                    this.last = node;
+                }
+                node = node.getPointer();
+                return true;
+            } else{
+                node=node.getPointer();
+            }
+        }
+        return false;
     }
 
     /**
      * Looks for not undefined task. If encountered, an acumulator is increased and when finished, returns the
-     * amount of task in the array.
+     * amount of tasks in the list.
      * @return
      */
     public int size(){
-        int numberOfTasks=0;
-        return numberOfTasks;
+        int size = 0;
+        Node node = first;
+        while (node != null) {
+            node = node.getPointer();
+            size++;
+        }
+        return size;
     }
 
     /**
@@ -42,12 +80,78 @@ public class LinkedTaskList {
      * @return taskList[index]
      */
     public Task getTask(int index){
-        return taskList[index];
+        int iteration = 0;
+        Node node = first;
+        while (iteration<index) {
+            node = node.getPointer();
+            iteration++;
+        }
+        return (Task)node.getValue();
     }
 
-    public LinkedTaskList incoming(){
-        LinkedTaskList lista = new LinkedTaskList();
-        return lista;
+    public LinkedTaskList incoming(int from, int to){
+        LinkedTaskList incomingTasks = new LinkedTaskList();
+        Node node = first;
+        while(node!=null) {
+            if (((Task)node.getValue()).isActive() == true && ((Task)node.getValue()).getStartTime()<=to) {
+                incomingTasks.add(((Task)node.getValue()));
+            }
+            node = node.getPointer();
+        }
+
+        for(int i=0;i<incomingTasks.size();i++) {
+            int j = incomingTasks.getTask(i).nextTimeAfter(from);
+            if(!(j>=from && j<=to)){incomingTasks.remove(incomingTasks.getTask(i));}
+        }
+        return incomingTasks;
     }
 
+    public class Node {
+
+        private Object value;
+        private Node pointer;
+
+        public Node() {
+            this.value = null;
+            this.pointer = null;
+        }
+
+        public Node(Object value) {
+            this.value = value;
+            this.pointer = null;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
+
+        public Node getPointer() {
+            return pointer;
+        }
+
+        public void setPointer(Node pointer) {
+            this.pointer = pointer;
+        }
+
+    }
+
+    public void removeLast(){
+        Node node = first;
+        while (node != null) {
+            if (node.getPointer() == null && node == first) {
+                first = null;
+                last = null;
+                break;
+            } else if (node.getPointer().getPointer() == null) {
+                node.setPointer(null);
+                last = node;
+                break;
+            }
+            node = node.getPointer();
+        }
+    }
 }
