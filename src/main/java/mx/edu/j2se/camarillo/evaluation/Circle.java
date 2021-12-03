@@ -14,7 +14,8 @@ public class Circle {
         this.radius = radius;
     }
 
-    public void setRadius(int radius){
+    public void setRadius(int radius) throws IllegalArgumentException{
+        if (radius<=0){throw new IllegalArgumentException("Radius should be positive");}
         this.radius = radius;
     }
     public int getRadius(){
