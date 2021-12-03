@@ -1,7 +1,5 @@
 package mx.edu.j2se.camarillo.evaluation;
 
-import java.math.*;
-
 import static java.lang.Math.PI;
 
 public class Circle {
