@@ -3,7 +3,7 @@ package mx.edu.j2se.camarillo.tasks;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList {
     private Task[] taskList = new Task[0];
 
     /**
@@ -30,9 +30,6 @@ public class ArrayTaskList {
     public boolean remove(Task task){
         Task[] dummy = new Task[taskList.length-1];
         for (int i = 0; i < taskList.length; i++) {
-            //System.out.println(task);
-            //System.out.println("\t" + taskList[i]);
-            //System.out.println("\t" + i + "\t" +(taskList[i]==task));
             if (taskList[i]==task){
                 System.arraycopy(taskList, 0, dummy, 0, i);
                 System.arraycopy(taskList, i+1, dummy, i, dummy.length-i);
@@ -60,27 +57,5 @@ public class ArrayTaskList {
     public Task getTask(int index) throws IndexOutOfBoundsException{
         if (index>taskList.length-1 || index<0) {throw new IndexOutOfBoundsException("Index exceeds permissible limits of the list");}
         return taskList[index];
-    }
-
-    /**
-     * Creates an ArrayTaskList subset from a given ArrayTaskList, if the tasks are comprehended between
-     * "from" time and "to" time
-     * @param from
-     * @param to
-     * @return
-     */
-    public ArrayTaskList incoming(int from, int to){
-        ArrayTaskList incomingTasks = new ArrayTaskList();
-        for (Task task: taskList) {
-            if (task.isActive() == true && task.getStartTime()<=to) {
-                incomingTasks.add(task);
-            }
-        }
-
-        for (Task task: incomingTasks.taskList) {
-            int j = task.nextTimeAfter(from);
-            if(!(j>=from && j<=to)){incomingTasks.remove(task);}
-        }
-        return incomingTasks;
     }
 }

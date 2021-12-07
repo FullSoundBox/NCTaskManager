@@ -1,7 +1,7 @@
 package mx.edu.j2se.camarillo.tasks.tests;
 
 import mx.edu.j2se.camarillo.tasks.LinkedTaskList;
-import mx.edu.j2se.camarillo.tasks.ArrayTaskList;
+import mx.edu.j2se.camarillo.tasks.AbstractTaskList;
 import mx.edu.j2se.camarillo.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
@@ -123,7 +123,7 @@ public class LinkedTaskListTesterP3 {
         Assert.assertEquals(taskToAdd3.toString(),taskListOne.getTask(3).toString());
         Assert.assertEquals(taskToAdd4.toString(),taskListOne.getTask(4).toString());
 
-        LinkedTaskList incomingNineToFive = new LinkedTaskList();
+        AbstractTaskList incomingNineToFive;
         incomingNineToFive = taskListOne.incoming(9,17);
         /*
         System.out.println();

@@ -1,6 +1,6 @@
 package mx.edu.j2se.camarillo.tasks;
 
-public class LinkedTaskList {
+public class LinkedTaskList extends AbstractTaskList{
     private Node first;
     private Node last;
 
@@ -37,11 +37,11 @@ public class LinkedTaskList {
                 first = null;
                 last = null;
                 return false;
-            } else if (node.getPointer()==last && (Task)node.getPointer().getValue()==task) {
+            } else if (node.getPointer()==last && node.getPointer().getValue()==task) {
                 node.setPointer(null);
                 last = node;
                 return true;}
-            else if ((Task)node.getValue()==task){
+            else if (node.getValue()==task){
                 node.setValue(node.getPointer().getValue());
                 node.setPointer(node.getPointer());
                 if (node == first){
@@ -89,23 +89,6 @@ public class LinkedTaskList {
         return (Task)node.getValue();
     }
 
-    public LinkedTaskList incoming(int from, int to){
-        LinkedTaskList incomingTasks = new LinkedTaskList();
-        Node node = first;
-        while(node!=null) {
-            if (((Task)node.getValue()).isActive() == true && ((Task)node.getValue()).getStartTime()<=to) {
-                incomingTasks.add(((Task)node.getValue()));
-            }
-            node = node.getPointer();
-        }
-
-        for(int i=0;i<incomingTasks.size();i++) {
-            int j = incomingTasks.getTask(i).nextTimeAfter(from);
-            if(!(j>=from && j<=to)){incomingTasks.remove(incomingTasks.getTask(i));}
-        }
-        return incomingTasks;
-    }
-
     public class Node {
 
         private Object value;
@@ -137,21 +120,5 @@ public class LinkedTaskList {
             this.pointer = pointer;
         }
 
-    }
-
-    public void removeLast(){
-        Node node = first;
-        while (node != null) {
-            if (node.getPointer() == null && node == first) {
-                first = null;
-                last = null;
-                break;
-            } else if (node.getPointer().getPointer() == null) {
-                node.setPointer(null);
-                last = node;
-                break;
-            }
-            node = node.getPointer();
-        }
     }
 }

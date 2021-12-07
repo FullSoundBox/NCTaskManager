@@ -2,6 +2,7 @@ package mx.edu.j2se.camarillo.tasks.tests;
 
 import mx.edu.j2se.camarillo.tasks.Task;
 import mx.edu.j2se.camarillo.tasks.ArrayTaskList;
+import mx.edu.j2se.camarillo.tasks.AbstractTaskList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -81,7 +82,7 @@ public class TaskListTesterP2 {
         taskListOne.add(taskToAdd5);
         Assert.assertEquals(5,taskListOne.size());
 
-        ArrayTaskList incomingNineToFive = new ArrayTaskList();
+        AbstractTaskList incomingNineToFive;
         incomingNineToFive = taskListOne.incoming(9,17);
         /*
         System.out.println();
