@@ -19,19 +19,6 @@ public class Task {
 	}
 
 	/**
-	 * Copies the parameters of another object
-	 */
-	public void Task(Task another){
-		if (another==null) {throw new NullPointerException("Task is empty");}
-		this.taskTitle = another.taskTitle;
-		this.startTime = another.startTime;
-		this.endTime = another.endTime;
-		this.taskInterval = another.taskInterval;
-		this.taskActive = another.taskActive;
-		this.taskRepeatability = another.taskRepeatability;
-	}
-
-	/**
 	 * Creates a non-repetitive, un-active task.
 	 */
 	public Task(String title, int time) throws IllegalArgumentException {
@@ -158,11 +145,11 @@ public class Task {
 	public int nextTimeAfter (int current){
 		if (current<=0) { throw new IllegalArgumentException("Current time must be positive");}
 
-		if (taskActive == false) {
+		if (!taskActive) {
 			return -1;
 		}
 		else{
-			if (taskRepeatability==false) {
+			if (!taskRepeatability) {
 				return (current <= startTime ? startTime : -1);
 			}
 			else{
@@ -178,12 +165,38 @@ public class Task {
 		}
 	}
 
+	public boolean equals(Task task){
+		return (this.taskTitle.equals(task.getTitle()) &&
+		this.startTime==task.getStartTime() &&
+		this.endTime==task.getEndTime() &&
+		this.taskInterval==task.getRepeatInterval() &&
+		this.taskActive==task.isActive() &&
+		this.taskRepeatability==task.isRepeated());
+	}
+
+	@Override
+	public int hashCode(){
+		return this.getTitle().hashCode();
+	}
+
+	/**
+	 * Copies the parameters of another object
+	 */
+	public void clone(Task task){
+		this.taskTitle=task.getTitle();
+		this.startTime=task.getStartTime();
+		this.endTime=task.getEndTime();
+		this.taskInterval=task.getRepeatInterval();
+		this.taskActive=task.isActive();
+		this.taskRepeatability=task.isRepeated();
+	}
+
 	/**
 	 *
-	 * Returns the parameters of the object
+	 * Prints the parameters of the object
 	 */
 	public String toString(){
-		String para = new String();
+		String para;
 			para = "Title: " + this.taskTitle
 					+ ", Start Time: " + this.startTime
 					+ ", End Time: " + this.endTime

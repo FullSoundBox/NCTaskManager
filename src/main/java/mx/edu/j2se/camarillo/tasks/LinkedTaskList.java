@@ -1,5 +1,7 @@
 package mx.edu.j2se.camarillo.tasks;
 
+import java.util.Iterator;
+
 public class LinkedTaskList extends AbstractTaskList{
     private Node first;
     private Node last;
@@ -29,32 +31,28 @@ public class LinkedTaskList extends AbstractTaskList{
      * @return true if task was found and erased
      */
     public boolean remove(Task task){
-        int iteration = 0;
         Node node = first;
 
         while(node!=null) {
-            if (node.getPointer() == null && node == first) {//Empty list
+            if (node.getPointer() == null && node.getValue() == null) {//Empty list
                 first = null;
                 last = null;
                 return false;
-            } else if (node.getPointer()==last && node.getPointer().getValue()==task) {
+            }else if (node.getPointer()==last && node.getPointer().getValue()==task) {//Last item to be removed
                 node.setPointer(null);
                 last = node;
-                return true;}
-            else if (node.getValue()==task){
-                node.setValue(node.getPointer().getValue());
-                node.setPointer(node.getPointer());
-                if (node == first){
-                    this.first = node.getPointer();
-                }
-                if (node == last){
-                    this.last = node;
-                }
-                node = node.getPointer();
                 return true;
-            } else{
-                node=node.getPointer();
+            }else if (node.getValue()==task){
+                if (node == first && node.getPointer()==null){
+                    first = null;
+                    last = null;
+                    return true;
+                }
+                node.setValue(node.getPointer().getValue());
+                if (node == first){ first = node.getPointer();}
+                return true;
             }
+            else{node=node.getPointer();}
         }
         return false;
     }
@@ -121,4 +119,5 @@ public class LinkedTaskList extends AbstractTaskList{
         }
 
     }
+
 }

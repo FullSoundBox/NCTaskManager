@@ -1,10 +1,21 @@
 package mx.edu.j2se.camarillo.tasks;
 
-public abstract class AbstractTaskList {
+import java.util.Iterator;
+
+public abstract class AbstractTaskList implements Iterable<Task>{
+    private String listName;
     public abstract void add(Task task);
     public abstract boolean remove(Task task);
     public abstract int size();
     public abstract Task getTask(int index);
+
+    public void setListName(String name){
+        this.listName = name;
+    }
+
+    public String getListName(){
+        return this.listName;
+    }
 
     public AbstractTaskList incoming(int from, int to){
         AbstractTaskList incomingTasks;
@@ -14,15 +25,65 @@ public abstract class AbstractTaskList {
             incomingTasks = new LinkedTaskList();
 
         for (int i=0; i<this.size();i++) {
-            if (this.getTask(i).isActive() && this.getTask(i).getStartTime()<=to) {
-                incomingTasks.add(this.getTask(i));
-            }
-        }
-
-        for (int i=0; i<this.size();i++) {
             int j = this.getTask(i).nextTimeAfter(from);
-            if(!(j>=from && j<=to)){incomingTasks.remove(this.getTask(i));}
+            if(j>=from && j<=to){incomingTasks.add(this.getTask(i));}
         }
         return incomingTasks;
+    }
+
+    public String toString(){
+        String para;
+        para = listName + "\nSize of the list: " + this.size() + "\n";
+        for(Task task: this){
+            para+=task.toString()+"\n";
+        }
+        return para;
+    }
+
+    public void clone(AbstractTaskList taskList){
+        for (Task task: taskList) {
+            this.add(task);
+        }
+    }
+
+    public Iterator<Task> iterator(){
+        return new AbstractTaskListIterator();
+    }
+
+    public class AbstractTaskListIterator implements Iterator<Task>{
+        private int index=-1;
+        public boolean hasNext() {
+            try{
+                getTask(index+1);
+            }
+            catch(Exception e1){
+                //System.out.println("Entra al catch");
+                return false;
+            }
+            return true;
+        }
+
+        public Task next(){
+            index++;
+            return getTask(index);
+        }
+    }
+
+    public boolean equals(AbstractTaskList taskList){
+        Iterator i1 = taskList.iterator();
+        int index=0;
+        for (Task task: this) {
+            if(!task.equals(taskList.getTask(index))){
+                return false;}
+            if (i1.hasNext())
+                index++;
+            else
+                return false;
+        }
+        return true;
+    }
+
+    public int hashCode(){
+        return (int) this.listName.hashCode();
     }
 }

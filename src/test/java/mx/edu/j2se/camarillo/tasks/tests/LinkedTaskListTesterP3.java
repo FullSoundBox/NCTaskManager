@@ -11,6 +11,22 @@ public class LinkedTaskListTesterP3 {
      * This test verifies proper working of add() method and getTask() method of LinkedTaskList
      */
     @Test
+    public void emptyLinkedListTest(){
+        Task taskToAddX = new Task("task to Add X",7);
+        Task taskToAddY = new Task("task to Add Y",10);
+        LinkedTaskList taskListOne = new LinkedTaskList();
+        taskToAddX.setActive(true);
+        taskToAddY.setActive(true);
+
+        Assert.assertEquals(0,taskListOne.size());//Empty task list
+        Assert.assertFalse(taskListOne.remove(taskToAddX));
+
+        taskListOne.add(taskToAddX);
+        Assert.assertFalse(taskListOne.remove(taskToAddY));
+        Assert.assertEquals(1,taskListOne.size());
+    }
+
+    @Test
     public void addTaskTest(){
         Task taskToAdd0 = new Task("task to Add 1",7);
         Task taskToAdd1 = new Task("task to Add 2",9,15,2);
