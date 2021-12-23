@@ -1,6 +1,7 @@
 package mx.edu.j2se.camarillo.tasks;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -59,5 +60,29 @@ public class ArrayTaskList extends AbstractTaskList {
     public Task getTask(int index) throws IndexOutOfBoundsException{
         if (index>taskList.length-1 || index<0) {throw new IndexOutOfBoundsException("Index exceeds permissible limits of the list");}
         return taskList[index];
+    }
+
+    @Override
+    public Iterator<Task> iterator(){
+        return new Iterator<Task>() {
+            int index=-1;
+            @Override
+            public boolean hasNext() {
+                try{
+                    taskList[index+1]=taskList[index+1];
+                }
+                catch(Exception e1){
+                    //System.out.println(e1);
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public Task next() {
+                index++;
+                return taskList[index];
+            }
+        };
     }
 }

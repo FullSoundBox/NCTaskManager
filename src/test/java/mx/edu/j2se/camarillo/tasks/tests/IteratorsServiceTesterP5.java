@@ -30,13 +30,15 @@ public class IteratorsServiceTesterP5 {
         taskListOne.add(taskToAdd0);
         taskListOne.add(taskToAdd1);
         taskListOne.add(taskToAdd2);
-        System.out.println();
 
+        /*
+        System.out.println();
         for (Iterator<Task> i2 = taskListOne.iterator(); i2.hasNext();) {
             Task item = i2.next();
             System.out.println(item);
-        }
+        }*/
 
+        System.out.println();
         for (Task task: taskListOne) {
             System.out.println(task);
         }
@@ -58,6 +60,14 @@ public class IteratorsServiceTesterP5 {
         taskListOne.add(taskToAdd2);
         Assert.assertTrue(i1.hasNext());
 
+        /*
+        for (Iterator<Task> i2 = taskListOne.iterator(); i2.hasNext();) {
+            System.out.println(i2.hasNext());
+            Task item = i2.next();
+            System.out.println(item);
+        }*/
+
+        System.out.println();
         for(Task task: taskListOne){
             System.out.println(task);
         }

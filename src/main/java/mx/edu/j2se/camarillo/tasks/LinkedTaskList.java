@@ -87,6 +87,49 @@ public class LinkedTaskList extends AbstractTaskList{
         return (Task)node.getValue();
     }
 
+    @Override
+    public Iterator<Task> iterator(){
+        return new Iterator<Task>() {
+            Node current = new Node();
+            @Override
+            public boolean hasNext() {
+                try{
+                    if(current.getValue()==null)
+                        current.setPointer(first);
+                    if(current.getPointer()==null || current==getLast())
+                        return false;
+                }
+                catch(Exception e1){
+                    //System.out.println(e1);
+                    return false;
+                }
+                return true;
+            }
+
+            @Override
+            public Task next() {
+                current=current.getPointer();
+                return (Task) current.getValue();
+            }
+        };
+    }
+
+    /**
+     * Returns the first node of the linked list
+     * @return Linkedlist first node
+     */
+    public Node getFirst(){
+        return this.first;
+    }
+
+    /**
+     *
+     * @return Linkedlist last node
+     */
+    public Node getLast(){
+        return this.last;
+    }
+
     public class Node {
 
         private Object value;
@@ -100,6 +143,11 @@ public class LinkedTaskList extends AbstractTaskList{
         public Node(Object value) {
             this.value = value;
             this.pointer = null;
+        }
+
+        public Node(Node pointer) {
+            this.value = null;
+            this.pointer = pointer;
         }
 
         public Object getValue() {

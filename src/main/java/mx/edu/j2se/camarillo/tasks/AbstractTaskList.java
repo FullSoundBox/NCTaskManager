@@ -31,6 +31,7 @@ public abstract class AbstractTaskList implements Iterable<Task>{
         return incomingTasks;
     }
 
+    @Override
     public String toString(){
         String para;
         para = listName + "\nSize of the list: " + this.size() + "\n";
@@ -43,29 +44,6 @@ public abstract class AbstractTaskList implements Iterable<Task>{
     public void clone(AbstractTaskList taskList){
         for (Task task: taskList) {
             this.add(task);
-        }
-    }
-
-    public Iterator<Task> iterator(){
-        return new AbstractTaskListIterator();
-    }
-
-    public class AbstractTaskListIterator implements Iterator<Task>{
-        private int index=-1;
-        public boolean hasNext() {
-            try{
-                getTask(index+1);
-            }
-            catch(Exception e1){
-                //System.out.println("Entra al catch");
-                return false;
-            }
-            return true;
-        }
-
-        public Task next(){
-            index++;
-            return getTask(index);
         }
     }
 
@@ -83,6 +61,7 @@ public abstract class AbstractTaskList implements Iterable<Task>{
         return true;
     }
 
+    @Override
     public int hashCode(){
         return (int) this.listName.hashCode();
     }
