@@ -6,6 +6,7 @@ import mx.edu.j2se.camarillo.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
 import java.util.Iterator;
+import java.util.Spliterator;
 
 public class IteratorsServiceTesterP5 {
 
@@ -72,6 +73,24 @@ public class IteratorsServiceTesterP5 {
             System.out.println(task);
         }
     }
+
+    /*
+    @Test
+    public void linkedSpliteratorTest(){
+        LinkedTaskList taskListOne = new LinkedTaskList();
+        Task taskToAdd0 = new Task("task to Add 0",7);
+        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
+        Task taskToAdd2 = new Task("task to Add 2",15);
+        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
+        Task taskToAdd4 = new Task("task to Add 4",18);
+        Spliterator<Task> sp1 = taskListOne.spliterator();
+
+        Assert.assertFalse(sp1.tryAdvance((task)-> System.out.println(task)));
+        taskListOne.add(taskToAdd0);
+        taskListOne.add(taskToAdd1);
+        taskListOne.add(taskToAdd2);
+        Assert.assertTrue(sp1.tryAdvance((task) -> System.out.println(task)));
+    }*/
 
     @Test
     public void taskEqualsTest(){

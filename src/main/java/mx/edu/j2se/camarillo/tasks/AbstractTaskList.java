@@ -1,6 +1,11 @@
 package mx.edu.j2se.camarillo.tasks;
 
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.function.*;
+import java.util.stream.*;
 
 public abstract class AbstractTaskList implements Iterable<Task>{
     private String listName;
@@ -17,17 +22,23 @@ public abstract class AbstractTaskList implements Iterable<Task>{
         return this.listName;
     }
 
-    public AbstractTaskList incoming(int from, int to){
+    public final AbstractTaskList incoming(int from, int to){
         AbstractTaskList incomingTasks;
         if (this.getClass()==ArrayTaskList.class)
             incomingTasks = new ArrayTaskList();
         else
             incomingTasks = new LinkedTaskList();
 
+        /*
         for (int i=0; i<this.size();i++) {
             int j = this.getTask(i).nextTimeAfter(from);
             if(j>=from && j<=to){incomingTasks.add(this.getTask(i));}
-        }
+        }*/
+
+        this.getStream()
+                .filter(task -> task.nextTimeAfter(from)>=from && task.nextTimeAfter(from)<=to)
+                .forEach(incomingTasks::add);
+
         return incomingTasks;
     }
 
@@ -63,6 +74,8 @@ public abstract class AbstractTaskList implements Iterable<Task>{
 
     @Override
     public int hashCode(){
-        return (int) this.listName.hashCode();
+        return this.listName.hashCode();
     }
+
+    public abstract Stream<Task> getStream();
 }

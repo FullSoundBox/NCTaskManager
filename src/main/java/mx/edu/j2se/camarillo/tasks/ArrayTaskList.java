@@ -1,10 +1,9 @@
 package mx.edu.j2se.camarillo.tasks;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Arrays;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 public class ArrayTaskList extends AbstractTaskList {
     private Task[] taskList = new Task[0];
@@ -84,5 +83,9 @@ public class ArrayTaskList extends AbstractTaskList {
                 return taskList[index];
             }
         };
+    }
+
+    public Stream<Task> getStream(){
+        return StreamSupport.stream(this.spliterator(), false);
     }
 }

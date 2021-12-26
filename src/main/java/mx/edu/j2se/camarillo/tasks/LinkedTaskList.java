@@ -1,6 +1,8 @@
 package mx.edu.j2se.camarillo.tasks;
 
-import java.util.Iterator;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 public class LinkedTaskList extends AbstractTaskList{
     private Node first;
@@ -11,7 +13,9 @@ public class LinkedTaskList extends AbstractTaskList{
      * Adds a task to the last node in the linked list
      * @param task
      */
-    public void add(Task task){
+    public void add(Task task) throws NullPointerException{
+        if (task.equals(null)) throw new NullPointerException();
+
         Node node = new Node();
         node.setValue(task);
 
@@ -30,7 +34,8 @@ public class LinkedTaskList extends AbstractTaskList{
      * @param task
      * @return true if task was found and erased
      */
-    public boolean remove(Task task){
+    public boolean remove(Task task) throws NullPointerException{
+        if (task.equals(null)) throw new NullPointerException();
         Node node = first;
 
         while(node!=null) {
@@ -114,6 +119,11 @@ public class LinkedTaskList extends AbstractTaskList{
         };
     }
 
+    @Override
+    public Stream<Task> getStream(){
+        return StreamSupport.stream(this.spliterator(), false);
+    }
+
     /**
      * Returns the first node of the linked list
      * @return Linkedlist first node
@@ -167,5 +177,4 @@ public class LinkedTaskList extends AbstractTaskList{
         }
 
     }
-
 }
