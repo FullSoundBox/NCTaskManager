@@ -14,7 +14,7 @@ public class LinkedTaskList extends AbstractTaskList{
      * @param task
      */
     public void add(Task task) throws NullPointerException{
-        if (task.equals(null)) throw new NullPointerException();
+        if (task==null) throw new NullPointerException();
 
         Node node = new Node();
         node.setValue(task);
@@ -35,7 +35,7 @@ public class LinkedTaskList extends AbstractTaskList{
      * @return true if task was found and erased
      */
     public boolean remove(Task task) throws NullPointerException{
-        if (task.equals(null)) throw new NullPointerException();
+        if (task==null) throw new NullPointerException();
         Node node = first;
 
         while(node!=null) {
