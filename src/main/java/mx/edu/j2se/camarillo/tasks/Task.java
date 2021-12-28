@@ -1,18 +1,19 @@
 package mx.edu.j2se.camarillo.tasks;
+import java.time.LocalDateTime;
 
 public class Task {
 	private String taskTitle;
-	private int startTime;
-	private int endTime;
-	private int taskInterval;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
+	private long taskInterval;
 	private boolean taskActive;
 	private boolean taskRepeatability;
 
 	public Task(){
 		super();
 		taskTitle = null;
-		startTime = 0;
-		endTime = 0;
+		startTime = null;
+		endTime = null;
 		taskInterval = 0;
 		taskActive = false;
 		taskRepeatability = false;
@@ -21,8 +22,8 @@ public class Task {
 	/**
 	 * Creates a non-repetitive, un-active task.
 	 */
-	public Task(String title, int time) throws IllegalArgumentException {
-		if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
+	public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+		//if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
 
 		this.taskTitle = title;
 		this.startTime = time;
@@ -34,9 +35,9 @@ public class Task {
 	/**
 	 * Creates a repetitive, un-active task
 	 */
-	public Task(String title, int start, int end, int interval) throws IllegalArgumentException{
-		if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
-		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
+	public Task(String title, LocalDateTime start, LocalDateTime end, long interval) throws IllegalArgumentException{
+		//if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
+		//if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
 
 		this.taskTitle = title;
 		this.startTime = start;
@@ -76,7 +77,7 @@ public class Task {
 	 * Returns the time of the non-repetitive task. If it is repetitive,
 	 * returns the start time of the task.
 	 */
-	public int getTime() {
+	public LocalDateTime getTime() {
 		return startTime;
 	}
 
@@ -84,8 +85,8 @@ public class Task {
 	 * Sets the time of the non-repetitive task. If it is repetitive, the task is turned into
 	 * a non-repetitive task.
 	 */
-	public void setTime(int time) throws IllegalArgumentException{
-		if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
+	public void setTime(LocalDateTime time) throws IllegalArgumentException{
+		//if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
 
 		startTime = time;
 		endTime = time;
@@ -97,7 +98,7 @@ public class Task {
 	 * Returns the start time of a repetitive task. If it's a non-repetitive task
 	 * it returns the time of the task.
 	 */
-	public int getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 
@@ -105,14 +106,14 @@ public class Task {
 	 * Returns the end time of a repetitive task. If it's a non-repetitive task
 	 * a warning is returned and getTime() should be used.
 	 */
-	public int getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
 	/**Returns the repetition interval of the repetitive task. If it's a non-repetitive task
 	 * a value of zero is returned.
 	 */
-	public int getRepeatInterval(){
+	public long getRepeatInterval(){
 		return taskInterval;
 	}
 
@@ -120,9 +121,9 @@ public class Task {
 	 * Sets the start and end time, and also the repetition interval of a repetitive task.
 	 * If it is a non-repetitive task, it's turned into a repetitive task.
 	 */
-	public void setTime(int start, int end, int interval) throws IllegalArgumentException{
-		if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
-		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
+	public void setTime(LocalDateTime start, LocalDateTime end, long interval) throws IllegalArgumentException{
+		//if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
+		//if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
 
 		startTime = start;
 		endTime = end;
@@ -142,23 +143,23 @@ public class Task {
 	 * un-active, it returns -1. If after the specified time the task is not executed
 	 * anymore, this method returns a -1.
 	 */
-	public int nextTimeAfter (int current){
-		if (current<=0) { throw new IllegalArgumentException("Current time must be positive");}
+	public LocalDateTime nextTimeAfter (LocalDateTime current){
+		//if (current<=0) { throw new IllegalArgumentException("Current time must be positive");}
 
 		if (!taskActive) {
-			return -1;
+			return null;
 		}
 		else{
 			if (!taskRepeatability) {
-				return (current <= startTime ? startTime : -1);
+				return (current.isBefore(startTime) ? startTime : null);
 			}
 			else{
-				if(current>endTime){
-					return -1;
+				if(current.isAfter(endTime)){
+					return null;
 				}
 				else {
-					int nextTime = startTime;
-					while(current>nextTime){nextTime += taskInterval;}
+					LocalDateTime nextTime = startTime;
+					while(current.isAfter(nextTime)){nextTime = nextTime.plusHours(taskInterval);}
 					return (nextTime);
 				}
 			}

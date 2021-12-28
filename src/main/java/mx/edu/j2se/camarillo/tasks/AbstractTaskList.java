@@ -1,5 +1,6 @@
 package mx.edu.j2se.camarillo.tasks;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public abstract class AbstractTaskList implements Iterable<Task>{
         return this.listName;
     }
 
-    public final AbstractTaskList incoming(int from, int to){
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to){
         AbstractTaskList incomingTasks;
         if (this.getClass()==ArrayTaskList.class)
             incomingTasks = new ArrayTaskList();
@@ -35,9 +36,11 @@ public abstract class AbstractTaskList implements Iterable<Task>{
             if(j>=from && j<=to){incomingTasks.add(this.getTask(i));}
         }*/
 
-        this.getStream()
-                .filter(task -> task.nextTimeAfter(from)>=from && task.nextTimeAfter(from)<=to)
-                .forEach(incomingTasks::add);
+        try{
+            this.getStream()
+                    .filter(task -> task.nextTimeAfter(from).isAfter(from) && task.nextTimeAfter(from).isBefore(to))
+                    .forEach(incomingTasks::add);
+        }catch(Exception e1){}
 
         return incomingTasks;
     }

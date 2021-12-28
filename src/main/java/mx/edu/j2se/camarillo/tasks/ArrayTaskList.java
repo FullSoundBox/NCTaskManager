@@ -16,7 +16,7 @@ public class ArrayTaskList extends AbstractTaskList {
      * @throws NullPointerException if the Task reference is empty, this throws a NullPointerException
      */
     public void add(Task task) throws NullPointerException{
-        if (task==null) {throw new NullPointerException("Empty link");}
+        if (task==null) {throw new NullPointerException("Empty reference");}
         Task[] dummy = new Task[taskList.length+1];
         System.arraycopy(taskList,0,dummy,0,taskList.length);
         dummy[taskList.length]=task;
