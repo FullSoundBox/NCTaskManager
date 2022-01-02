@@ -5,6 +5,8 @@ import mx.edu.j2se.camarillo.tasks.LinkedTaskList;
 import mx.edu.j2se.camarillo.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Spliterator;
 
@@ -13,14 +15,18 @@ public class IteratorsServiceTesterP5 {
     @Test
     public void arrayIteratorsTest(){
         ArrayTaskList taskListOne = new ArrayTaskList();
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
-        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
-        Task taskToAdd4 = new Task("task to Add 4",18);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
         Iterator<Task> i1 = taskListOne.iterator();
 
         Assert.assertFalse(i1.hasNext());
+        taskListOne.add(taskToAdd0);
+        Assert.assertEquals(taskToAdd0,i1.next());
 
         System.out.println("Primer for each (lista vacia)");
         for (Task task: taskListOne) {
@@ -48,11 +54,13 @@ public class IteratorsServiceTesterP5 {
     @Test
     public void linkedIteratorTest(){
         LinkedTaskList taskListOne = new LinkedTaskList();
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
-        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
-        Task taskToAdd4 = new Task("task to Add 4",18);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
         Iterator<Task> i1 = taskListOne.iterator();
 
         Assert.assertFalse(i1.hasNext());
@@ -60,6 +68,9 @@ public class IteratorsServiceTesterP5 {
         taskListOne.add(taskToAdd1);
         taskListOne.add(taskToAdd2);
         Assert.assertTrue(i1.hasNext());
+        Assert.assertEquals(taskToAdd0,i1.next());
+        Assert.assertEquals(taskToAdd1,i1.next());
+        Assert.assertEquals(taskToAdd2,i1.next());
 
         /*
         for (Iterator<Task> i2 = taskListOne.iterator(); i2.hasNext();) {
@@ -68,7 +79,7 @@ public class IteratorsServiceTesterP5 {
             System.out.println(item);
         }*/
 
-        System.out.println();
+//        System.out.println();
         for(Task task: taskListOne){
             System.out.println(task);
         }
@@ -94,10 +105,16 @@ public class IteratorsServiceTesterP5 {
 
     @Test
     public void taskEqualsTest(){
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 0",7);
-        Task taskToAdd3 = new Task("task to Add 1",9,15,2);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd3 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
 
         Assert.assertFalse(taskToAdd0.equals(taskToAdd1));
         Assert.assertTrue(taskToAdd0.equals(taskToAdd2));
@@ -120,11 +137,13 @@ public class IteratorsServiceTesterP5 {
         taskListTwo.setListName("taskListOne");
         taskListThree.setListName("taskListThree");
 
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
-        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
-        Task taskToAdd4 = new Task("task to Add 4",18);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
 
         taskListOne.add(taskToAdd0);
         taskListOne.add(taskToAdd1);
@@ -152,9 +171,13 @@ public class IteratorsServiceTesterP5 {
     public void toStringTest(){
         ArrayTaskList taskListOne = new ArrayTaskList();
         taskListOne.setListName("taskListOne");
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
 
         //System.out.println(taskListOne);
         //System.out.println();
@@ -170,9 +193,13 @@ public class IteratorsServiceTesterP5 {
         ArrayTaskList taskListOne = new ArrayTaskList();
         ArrayTaskList taskListTwo = new ArrayTaskList();
         LinkedTaskList taskListThree = new LinkedTaskList();
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
         Task taskToAdd3 = new Task();
         Task taskToAdd4 = new Task();
 

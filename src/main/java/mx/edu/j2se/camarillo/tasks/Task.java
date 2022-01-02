@@ -22,8 +22,8 @@ public class Task {
 	/**
 	 * Creates a non-repetitive, un-active task.
 	 */
-	public Task(String title, LocalDateTime time) throws IllegalArgumentException {
-		//if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
+	public Task(String title, LocalDateTime time){
+		if (time==null){throw new NullPointerException("Date is null");}
 
 		this.taskTitle = title;
 		this.startTime = time;
@@ -36,8 +36,9 @@ public class Task {
 	 * Creates a repetitive, un-active task
 	 */
 	public Task(String title, LocalDateTime start, LocalDateTime end, long interval) throws IllegalArgumentException{
-		//if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
-		//if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
+		if (start==null || end==null) {throw new NullPointerException("Dates can't be null");}
+		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be positive");}
+		if (start.isAfter(end)) {throw new IllegalArgumentException("Start date can't be after end date");}
 
 		this.taskTitle = title;
 		this.startTime = start;
@@ -86,7 +87,7 @@ public class Task {
 	 * a non-repetitive task.
 	 */
 	public void setTime(LocalDateTime time) throws IllegalArgumentException{
-		//if (time<0){throw new IllegalArgumentException("Time cannot be a negative number");}
+		if (time==null){throw new NullPointerException("Time is null");}
 
 		startTime = time;
 		endTime = time;
@@ -122,8 +123,9 @@ public class Task {
 	 * If it is a non-repetitive task, it's turned into a repetitive task.
 	 */
 	public void setTime(LocalDateTime start, LocalDateTime end, long interval) throws IllegalArgumentException{
-		//if (start<0 || end<0) {throw new IllegalArgumentException("Time cannot be a negative number");}
-		//if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be more than zero");}
+		if (start==null || end==null) {throw new NullPointerException("Dates can't be null");}
+		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be positive");}
+		if (start.isAfter(end)) {throw new IllegalArgumentException("Start date can't be after end date");}
 
 		startTime = start;
 		endTime = end;
@@ -140,36 +142,44 @@ public class Task {
 
 	/**
 	 * Tells the next execution time of a task given a current time. If the task is
-	 * un-active, it returns -1. If after the specified time the task is not executed
-	 * anymore, this method returns a -1.
+	 * un-active, it returns null. If after the specified time the task is not executed
+	 * anymore, this method returns null.
+	 * @param current date of reference
+	 * @return next date task is executed, null if is not
 	 */
 	public LocalDateTime nextTimeAfter (LocalDateTime current){
-		//if (current<=0) { throw new IllegalArgumentException("Current time must be positive");}
+		if (current==null) { throw new NullPointerException("Current date is null");}
 
 		if (!taskActive) {
 			return null;
 		}
 		else{
 			if (!taskRepeatability) {
-				return (current.isBefore(startTime) ? startTime : null);
+				return (current.isBefore(startTime) ? startTime: null);
 			}
 			else{
-				if(current.isAfter(endTime)){
+				if(current.isAfter(endTime) || current.isEqual(endTime)){
 					return null;
 				}
 				else {
 					LocalDateTime nextTime = startTime;
-					while(current.isAfter(nextTime)){nextTime = nextTime.plusHours(taskInterval);}
-					return (nextTime);
+					while (!nextTime.isAfter(current)){
+						//System.out.println(nextTime);
+						nextTime = nextTime.plusHours(taskInterval);
+					}
+					return nextTime;
+//					return current.plusHours(taskInterval);
 				}
 			}
 		}
 	}
 
 	public boolean equals(Task task){
+		if(task==null) throw new NullPointerException("Task to compare is null");
+
 		return (this.taskTitle.equals(task.getTitle()) &&
-		this.startTime==task.getStartTime() &&
-		this.endTime==task.getEndTime() &&
+		this.startTime.equals(task.getStartTime()) &&
+		this.endTime.equals(task.getEndTime()) &&
 		this.taskInterval==task.getRepeatInterval() &&
 		this.taskActive==task.isActive() &&
 		this.taskRepeatability==task.isRepeated());
@@ -183,7 +193,9 @@ public class Task {
 	/**
 	 * Copies the parameters of another object
 	 */
-	public void clone(Task task){
+	public void clone(Task task) {
+		if (task==null) throw new NullPointerException("Task to clone is null");
+
 		this.taskTitle=task.getTitle();
 		this.startTime=task.getStartTime();
 		this.endTime=task.getEndTime();

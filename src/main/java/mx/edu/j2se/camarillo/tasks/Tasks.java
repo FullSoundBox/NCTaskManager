@@ -1,32 +1,28 @@
 package mx.edu.j2se.camarillo.tasks;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Tasks {
     public static Iterable<Task> incoming(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end){
         AbstractTaskList incomingTasks;
-        if (tasks.getClass()==ArrayTaskList.class)
-            incomingTasks = new ArrayTaskList();
-        else
+        if (tasks.getClass()==LinkedTaskList.class)
             incomingTasks = new LinkedTaskList();
+        else
+            incomingTasks = new ArrayTaskList();
 
         try{
             for (Task task: tasks) {
-                LocalDateTime dummy = task.nextTimeAfter(start);
-                if(dummy!=null){
-                    if (dummy.isAfter(start) && dummy.isBefore(end)) //
-                        incomingTasks.add(task);
-                }
+                //System.out.println(task);
+                if(task.nextTimeAfter(start)!=null &&
+                        task.nextTimeAfter(start).isAfter(start) && task.nextTimeAfter(start).isBefore(end))
+                    incomingTasks.add(task);
             }
         }catch(Exception e1) {
             System.out.println(e1);
         }
         return incomingTasks;
-    }   //TODO: Null-pointer exceptions could be handled more gracefully
+    }
 
     /**
      * Creates a new calendar based on an Iterable object (any Collection) and returns a calendar (TreeMap)
@@ -44,10 +40,10 @@ public class Tasks {
                 LocalDateTime dummy = task.nextTimeAfter(start);
                 while (dummy!=null && dummy.isAfter(start) && dummy.isBefore(end)) {
                     set.add(task);
-                    //System.out.println(dummy + "\t" + set);
-                    newCalendar.put(dummy,set);
-                    newCalendar.get(dummy).add(task);
-                    //System.out.println(newCalendar);
+                    if (newCalendar.get(dummy)==null)
+                        newCalendar.put(dummy,set);
+                    else
+                        newCalendar.get(dummy).add(task);
                     dummy = dummy.plusHours(task.getRepeatInterval());
                 }
             }
@@ -55,5 +51,5 @@ public class Tasks {
             System.out.println(e1);
         }
         return newCalendar;
-    }  // TODO: Check why Morning run is missing
+    }
 }

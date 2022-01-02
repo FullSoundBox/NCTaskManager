@@ -1,26 +1,33 @@
 package mx.edu.j2se.camarillo.tasks.tests;
 
 import mx.edu.j2se.camarillo.tasks.*;
-
 import org.junit.Assert;
 import org.junit.Test;
+import java.time.LocalDateTime;
 
 public class AbstractTaskListTestP4 {
     @Test
     public void arrayTaskListTest(){
         AbstractTaskList arrayTaskListOne = new ArrayTaskList();
 
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
-        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
-        Task taskToAdd4 = new Task("task to Add 4",18);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2020,1,1,10,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
+        Task taskToAdd3 = new Task("task to Add 3",
+                LocalDateTime.of(2021,1, 17,10,0),
+                LocalDateTime.of(2021,1, 20,10,0),8);
+        Task taskToAdd4 = new Task("task to Add 4",
+                LocalDateTime.of(2021,1, 18,10,0));
 
         taskToAdd0.setActive(true);
         taskToAdd1.setActive(true);
         //taskToAdd2.setActive(true);
-        taskToAdd3.setActive(true);
-        taskToAdd4.setActive(true);
+        //taskToAdd3.setActive(true);
+        //taskToAdd4.setActive(true);
 
         //Testing size()
         Assert.assertEquals(0,arrayTaskListOne.size());
@@ -39,22 +46,35 @@ public class AbstractTaskListTestP4 {
         arrayTaskListOne.add(taskToAdd4);
 
         //Testing incoming()
-        AbstractTaskList incomingNineToFive = arrayTaskListOne.incoming(9,17);
+        AbstractTaskList incomingNineToFive = arrayTaskListOne.incoming(
+                LocalDateTime.of(2021,1,1,10,0),
+                LocalDateTime.of(2021,6,1,23,0));
         Assert.assertEquals(ArrayTaskList.class,incomingNineToFive.getClass());
-        Assert.assertEquals(2,incomingNineToFive.size());
-        Assert.assertEquals(taskToAdd1.toString(),incomingNineToFive.getTask(0).toString());
-        Assert.assertEquals(taskToAdd3.toString(),incomingNineToFive.getTask(1).toString());
+        LocalDateTime from = LocalDateTime.of(2021,1,1,10,0);
+        LocalDateTime to = LocalDateTime.of(2021,6,1,23,0);
+
+//        System.out.println(taskToAdd1.nextTimeAfter(from).isAfter(from) && taskToAdd1.nextTimeAfter(from).isBefore(to));
+        Assert.assertEquals(1,incomingNineToFive.size());
+//        Assert.assertEquals(taskToAdd1.toString(),incomingNineToFive.getTask(0).toString());
+//        Assert.assertEquals(taskToAdd3.toString(),incomingNineToFive.getTask(1).toString());
     }
 
     @Test
     public void linkedTaskListTest(){
         AbstractTaskList linkedTaskListOne = new LinkedTaskList();
 
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
-        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
-        Task taskToAdd4 = new Task("task to Add 4",18);
+        Task taskToAdd0 = new Task("task to Add 0",
+                LocalDateTime.of(2021,1,1,8,0));
+        Task taskToAdd1 = new Task("task to Add 1",
+                LocalDateTime.of(2021,1, 1,10,0),
+                LocalDateTime.of(2021,2, 1,10,0),12);
+        Task taskToAdd2 = new Task("task to Add 2",
+                LocalDateTime.of(2021,1, 7,12,0));
+        Task taskToAdd3 = new Task("task to Add 3",
+                LocalDateTime.of(2021,1, 15,10,0),
+                LocalDateTime.of(2021,1, 20,10,0),8);
+        Task taskToAdd4 = new Task("task to Add 4",
+                LocalDateTime.of(2021,1, 21,10,0));
 
         taskToAdd0.setActive(true);
         taskToAdd1.setActive(true);
@@ -79,11 +99,14 @@ public class AbstractTaskListTestP4 {
         linkedTaskListOne.add(taskToAdd4);
 
         //Testing incoming()
-        AbstractTaskList incomingNineToFive = linkedTaskListOne.incoming(9,17);
-        Assert.assertEquals(LinkedTaskList.class,incomingNineToFive.getClass());
-        Assert.assertEquals(2,incomingNineToFive.size());
-        Assert.assertEquals(taskToAdd1.toString(),incomingNineToFive.getTask(0).toString());
-        Assert.assertEquals(taskToAdd3.toString(),incomingNineToFive.getTask(1).toString());
+        AbstractTaskList incomingTasks = linkedTaskListOne.incoming(
+                LocalDateTime.of(2021,1,1,9,0),
+                LocalDateTime.of(2021,1,18,23,0));
+                
+        Assert.assertEquals(LinkedTaskList.class,incomingTasks.getClass());
+        Assert.assertEquals(2,incomingTasks.size());
+        Assert.assertEquals(taskToAdd1.toString(),incomingTasks.getTask(0).toString());
+        Assert.assertEquals(taskToAdd3.toString(),incomingTasks.getTask(1).toString());
     }
 
     @Test

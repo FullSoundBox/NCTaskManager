@@ -1,16 +1,10 @@
 package mx.edu.j2se.camarillo.tasks.tests;
 
-import mx.edu.j2se.camarillo.tasks.AbstractTaskList;
-import mx.edu.j2se.camarillo.tasks.ArrayTaskList;
-import mx.edu.j2se.camarillo.tasks.Task;
-import mx.edu.j2se.camarillo.tasks.Tasks;
+import mx.edu.j2se.camarillo.tasks.*;
 import org.junit.Assert;
 import org.junit.Test;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class TasksClassTestP7 {
 
@@ -67,6 +61,7 @@ public class TasksClassTestP7 {
         medication.setActive(true);
         friends.setActive(true);
 
+        //Testing ArrayTaskList
         ArrayTaskList originalTaskList = new ArrayTaskList();
         originalTaskList.add(lunch);
         originalTaskList.add(run);
@@ -74,13 +69,49 @@ public class TasksClassTestP7 {
         originalTaskList.add(friends);
 
         LocalDateTime from = LocalDateTime.of(2021,8,25,8,0);
-        LocalDateTime to = LocalDateTime.of(2021,8,26,8,0);
+        LocalDateTime to = LocalDateTime.of(2021,8,27,8,0);
         ArrayTaskList incomingTaskList = (ArrayTaskList)Tasks.incoming(originalTaskList,from,to);
-
         incomingTaskList.setListName("incomingTaskList");
 
-        System.out.println(incomingTaskList);
-        System.out.println(incomingTaskList.getClass());
+        Assert.assertEquals(2,incomingTaskList.size());
+        Assert.assertEquals(run,incomingTaskList.getTask(0));
+        Assert.assertEquals(medication,incomingTaskList.getTask(1));//Wasn't appearing because of the interval
+
+        //Testing LinkedTaskList
+        LinkedTaskList originalLinkedTaskList = new LinkedTaskList();
+        originalLinkedTaskList.add(lunch);
+        originalLinkedTaskList.add(run);
+        originalLinkedTaskList.add(medication);
+        originalLinkedTaskList.add(friends);
+
+        LinkedTaskList incomingTaskList2 = (LinkedTaskList)Tasks.incoming(originalLinkedTaskList,from,to);
+        Assert.assertEquals(2,incomingTaskList2.size());
+        Assert.assertEquals(run,incomingTaskList.getTask(0));
+        Assert.assertEquals(medication,incomingTaskList.getTask(1));
+
+        //Testing ArrayList
+        ArrayList<Task> arrayList = new ArrayList<>();
+        arrayList.add(lunch);
+        arrayList.add(run);
+        arrayList.add(medication);
+        arrayList.add(friends);
+//        ArrayList incomingTaskList3 = (ArrayList)Tasks.incoming(originalTaskList,from,to);
+        ArrayTaskList incomingTaskList3 = (ArrayTaskList)Tasks.incoming(arrayList,from,to);
+        Assert.assertEquals(2,incomingTaskList.size());
+        Assert.assertEquals(run,incomingTaskList3.getTask(0));
+        Assert.assertEquals(medication,incomingTaskList3.getTask(1));
+
+        //Testing LinkedList
+        LinkedList<Task> linkedList = new LinkedList<>();
+        linkedList.add(lunch);
+        linkedList.add(run);
+        linkedList.add(medication);
+        linkedList.add(friends);
+//        ArrayList incomingTaskList4 = (ArrayList)Tasks.incoming(originalTaskList,from,to);
+        ArrayTaskList incomingTaskList4 = (ArrayTaskList)Tasks.incoming(linkedList,from,to);
+        Assert.assertEquals(2,incomingTaskList.size());
+        Assert.assertEquals(run,incomingTaskList4.getTask(0));
+        Assert.assertEquals(medication,incomingTaskList4.getTask(1));
     }
 
     @Test
@@ -108,19 +139,41 @@ public class TasksClassTestP7 {
         medication.setActive(true);
         friends.setActive(true);
 
+        //Testing ArrayTaskList
         AbstractTaskList originalTaskList = new ArrayTaskList();
         originalTaskList.add(lunch);
         originalTaskList.add(run);
         originalTaskList.add(medication);
         originalTaskList.add(friends);
 
+        //Testing LinkedTaskList
+        LinkedTaskList originalLinkedTaskList = new LinkedTaskList();
+        originalLinkedTaskList.add(lunch);
+        originalLinkedTaskList.add(run);
+        originalLinkedTaskList.add(medication);
+        originalLinkedTaskList.add(friends);
+
+        //Testing ArrayList
+        ArrayList<Task> arrayList = new ArrayList<>();
+        arrayList.add(lunch);
+        arrayList.add(run);
+        arrayList.add(medication);
+        arrayList.add(friends);
+
+        //Testing LinkedList
+        LinkedList<Task> linkedList = new LinkedList<>();
+        linkedList.add(lunch);
+        linkedList.add(run);
+        linkedList.add(medication);
+        linkedList.add(friends);
+
         LocalDateTime from = LocalDateTime.of(2021,8,25,8,0);
         LocalDateTime to = LocalDateTime.of(2021,8,26,8,0);
-        calendarOne = Tasks.calendar(originalTaskList,from,to);
+//        calendarOne = Tasks.calendar(originalTaskList,from,to);
+//        calendarOne = Tasks.calendar(originalLinkedTaskList,from,to);
+//        calendarOne = Tasks.calendar(arrayList,from,to);
+        calendarOne = Tasks.calendar(linkedList,from,to);
 
-//        System.out.println(calendarOne);
-
-        System.out.println();
         for (Map.Entry mapElement : calendarOne.entrySet()) {
             LocalDateTime key = (LocalDateTime) mapElement.getKey();
 

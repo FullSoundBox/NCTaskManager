@@ -38,9 +38,18 @@ public abstract class AbstractTaskList implements Iterable<Task>{
 
         try{
             this.getStream()
-                    .filter(task -> task.nextTimeAfter(from).isAfter(from) && task.nextTimeAfter(from).isBefore(to))
+                    .filter(task -> {
+                        //System.out.println(task);
+                        if (task.nextTimeAfter(from)!=null &&
+                                task.nextTimeAfter(from).isAfter(from) && task.nextTimeAfter(from).isBefore(to))
+                            return true;
+                        else
+                            return false;
+                    })
                     .forEach(incomingTasks::add);
-        }catch(Exception e1){}
+        }catch(Exception e1){
+            //System.out.println(e1);
+        }
 
         return incomingTasks;
     }

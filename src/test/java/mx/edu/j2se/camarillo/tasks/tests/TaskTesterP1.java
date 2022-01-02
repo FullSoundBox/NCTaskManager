@@ -126,12 +126,16 @@ public class TaskTesterP1 {
 
         //Testing non-repetitive task
         Assert.assertEquals(null,
-                taskOrdenarLibrero.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0)));// task is not active
+                taskOrdenarLibrero.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0)));
+        // task is not active
         taskOrdenarLibrero.setActive(true);
+        //Current date is the same as execution time, so there's no next execution time
         Assert.assertEquals(null,
                 taskOrdenarLibrero.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0)));
+        //Current date is before execution time, so it returns execution time
         Assert.assertEquals(LocalDateTime.of(2021,1,1,7,0),
                 taskOrdenarLibrero.nextTimeAfter(LocalDateTime.of(2021,1,1,3,0)));
+        //Current date is after execution time, so it returns null
         Assert.assertEquals(null,
                 taskOrdenarLibrero.nextTimeAfter(LocalDateTime.of(2021,1,1,15,0)));
 
@@ -140,17 +144,22 @@ public class TaskTesterP1 {
                 LocalDateTime.of(2021,4,1,7,0), 24);//Repetitive
 
         //Testing repetitive task
+        //null is expected because task is not active
         Assert.assertEquals(null,
                 taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0))); //task is not active
         taskCalisthenics.setActive(true);
+        //active, date before startTime
         Assert.assertEquals(LocalDateTime.of(2021,1,1,7,0),
-                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,1,1,5,0)));//active, date before startTime
-        Assert.assertEquals(LocalDateTime.of(2021,1,1,7,0),
-                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0)));//active, date is the same as startTime
-        Assert.assertEquals(LocalDateTime.of(2021,3,1,7,0),
-                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,3,1,7,0)));//active, between startTime and next execution
-        Assert.assertEquals(LocalDateTime.of(2021,1,1,7,0), //TODO: Check different implementation for this case
-                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0)));//active, same as next execution
+                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,1,1,5,0)));
+        //Current date is the same as start time, so it returns start date plus interval
+        Assert.assertEquals(LocalDateTime.of(2021,1,2,7,0),
+                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,1,1,7,0)));
+        //Date between start and end time, returns same date plus interval
+        Assert.assertEquals(LocalDateTime.of(2021,3,2,7,0),
+                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,3,1,7,0)));
+        //active, same as end time, so there's no next execution time
+        Assert.assertEquals(null,
+                taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,4,1,7,0)));
         Assert.assertEquals(null,
                 taskCalisthenics.nextTimeAfter(LocalDateTime.of(2021,5,1,7,0)));//active, after end time
     }
