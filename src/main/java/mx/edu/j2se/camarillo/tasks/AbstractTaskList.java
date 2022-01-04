@@ -1,5 +1,6 @@
 package mx.edu.j2se.camarillo.tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -8,7 +9,7 @@ import java.util.Spliterator;
 import java.util.function.*;
 import java.util.stream.*;
 
-public abstract class AbstractTaskList implements Iterable<Task>{
+public abstract class AbstractTaskList implements Iterable<Task>, Serializable {
     private String listName;
     public abstract void add(Task task);
     public abstract boolean remove(Task task);

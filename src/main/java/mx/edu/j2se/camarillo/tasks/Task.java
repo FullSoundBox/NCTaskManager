@@ -1,7 +1,8 @@
 package mx.edu.j2se.camarillo.tasks;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Task {
+public class Task implements Serializable {
 	private String taskTitle;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
