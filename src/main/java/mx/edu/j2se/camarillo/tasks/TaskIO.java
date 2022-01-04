@@ -1,10 +1,11 @@
 package mx.edu.j2se.camarillo.tasks;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 public class TaskIO {
     public static void writeBinary(AbstractTaskList tasks, OutputStream out) throws IOException{
@@ -96,24 +97,43 @@ public class TaskIO {
         inputStream.close();
     }
 
-    public static void write(AbstractTaskList tasks, Writer out){
+    public static void write(AbstractTaskList tasks, Writer out) throws IOException{
+        final Gson gson = new Gson();
+        BufferedWriter bufferedWriter = new BufferedWriter(out);
+        final Type tipoArrayTaskList = new TypeToken<ArrayTaskList>(){}.getType();
+        final Type tipoLinkedTaskList = new TypeToken<LinkedTaskList>(){}.getType();
 
+        bufferedWriter.write(tasks.getClass().toString());
+        bufferedWriter.newLine();
+        if (tasks.getClass()==ArrayTaskList.class)
+            bufferedWriter.write(gson.toJson(tasks,tipoArrayTaskList));
+        else
+            bufferedWriter.write(gson.toJson(tasks,tipoLinkedTaskList));
+        bufferedWriter.close();
+        out.close();
     }
-    public static void read(AbstractTaskList tasks, Reader in){}
-    public static void writeText(AbstractTaskList tasks, File file){
+    public static void read(AbstractTaskList tasks, Reader in) throws IOException{
         final Gson gson = new Gson();
-        try{
-            gson.toJson(tasks.getTask(0),new FileWriter(file));
-        } catch (IOException e) {
-            e.printStackTrace();
+        BufferedReader bufferedReader = new BufferedReader(in);
+        final Type tipoArrayTaskList = new TypeToken<ArrayTaskList>(){}.getType();
+        final Type tipoLinkedTaskList = new TypeToken<LinkedTaskList>(){}.getType();
+
+        if (bufferedReader.readLine().equals(ArrayTaskList.class.toString())){
+            String jsonInput = bufferedReader.readLine();
+            tasks.clone(gson.fromJson(jsonInput,tipoArrayTaskList));
         }
+        else {
+            String jsonInput = bufferedReader.readLine();
+            tasks.clone(gson.fromJson(jsonInput, tipoLinkedTaskList));
+        }
+        bufferedReader.close();
+        in.close();
     }
-    public static void readText(AbstractTaskList tasks, File file){
-        final Gson gson = new Gson();
-        try{
-            tasks = gson.fromJson(new FileReader(file),AbstractTaskList.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+    public static void writeText(AbstractTaskList tasks, File file) throws IOException {
+        write(tasks,new FileWriter(file));
+    }
+    public static void readText(AbstractTaskList tasks, File file) throws IOException{
+        read(tasks,new FileReader(file));
     }
 }

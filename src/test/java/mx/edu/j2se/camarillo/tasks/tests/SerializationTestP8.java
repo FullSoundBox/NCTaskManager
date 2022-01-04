@@ -208,7 +208,6 @@ public class SerializationTestP8 {
 
     @Test
     public void inputOutputJSONTest() {
-        AbstractTaskList taskList = new ArrayTaskList();
         Task lunch = new Task("Lunch with a beautiful girl",
                 LocalDateTime.of(2021,8,24,16,0));
 
@@ -225,24 +224,42 @@ public class SerializationTestP8 {
         Task friends = new Task("Meeting with friends",
                 LocalDateTime.of(2021,9,1,18,0));
 
+        AbstractTaskList taskList = new ArrayTaskList();
+        taskList.setListName("taskListToSerialize");
+        AbstractTaskList taskListToDeSerialize = new LinkedTaskList();
+        AbstractTaskList taskListToDeSerialize2 = new ArrayTaskList();
+        taskListToDeSerialize.setListName("taskListToDeSerialize");
+        taskListToDeSerialize2.setListName("taskListToDeSerialize2");
+
         taskList.add(lunch);
         taskList.add(run);
         taskList.add(medication);
         taskList.add(friends);
-        taskList.setListName("taskListToSerialize");
 
-        final Gson gson = new Gson();
         try{
             TaskIO.write(taskList,new FileWriter("jsonFileToWrite.json"));
+
+            TaskIO.read(taskListToDeSerialize, new FileReader("jsonFileToWrite.json"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(taskListToDeSerialize);
 
         try{
-            gson.toJson(taskList.getTask(0),new FileWriter("jsonFileToWrite.json"));
+            File serialDataFile = new File("jsonFileToWrite.json");
+            TaskIO.writeText(taskList,serialDataFile);
+
+            TaskIO.readText(taskListToDeSerialize2,serialDataFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(taskListToDeSerialize2);
+
+//        try{
+//            gson.toJson(taskList.getTask(0),new FileWriter("jsonFileToWrite.json"));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 //        try{
 //            TaskIO.writeText(taskList,new File("jsonFileToWrite.json"));
