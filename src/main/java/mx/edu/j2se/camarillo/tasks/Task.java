@@ -2,7 +2,7 @@ package mx.edu.j2se.camarillo.tasks;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Task implements Serializable {
+public class Task implements Serializable, Cloneable {
 	private String taskTitle;
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
@@ -202,15 +202,9 @@ public class Task implements Serializable {
 	/**
 	 * Copies the parameters of another object
 	 */
-	public void clone(Task task) {
-		if (task==null) throw new NullPointerException("Task to clone is null");
-
-		this.taskTitle=task.getTitle();
-		this.startTime=task.getStartTime();
-		this.endTime=task.getEndTime();
-		this.taskInterval=task.getRepeatInterval();
-		this.taskActive=task.isActive();
-		this.taskRepeatability=task.isRepeated();
+	@Override
+	public Task clone() throws CloneNotSupportedException {
+		return (Task) super.clone();
 	}
 
 	/**

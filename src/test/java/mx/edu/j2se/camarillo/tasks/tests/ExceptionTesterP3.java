@@ -2,7 +2,6 @@ package mx.edu.j2se.camarillo.tasks.tests;
 
 import mx.edu.j2se.camarillo.tasks.ArrayTaskList;
 import mx.edu.j2se.camarillo.tasks.Task;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -98,9 +97,12 @@ public class ExceptionTesterP3 {
     public void nullTaskLink2(){
         Task dummyTaskToClone;
         dummyTaskToClone = null;
-
         Task dummyTask = new Task();
-        dummyTask.clone(dummyTaskToClone);
+        try{
+            dummyTask = dummyTaskToClone.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test (expected = NullPointerException.class)

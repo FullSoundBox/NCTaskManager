@@ -171,8 +171,13 @@ public class IteratorsServiceTesterP5 {
         Task taskToAdd4 = new Task();
 
         //Trying to clone a task
-        taskToAdd3.clone(taskToAdd0);
-        taskToAdd4.clone(taskToAdd1);
+        try{
+            taskToAdd3 = taskToAdd0.clone();
+            taskToAdd4 = taskToAdd1.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
         Assert.assertTrue(taskToAdd3.equals(taskToAdd0));
         Assert.assertTrue(taskToAdd4.equals(taskToAdd1));
         //Verifying we didn't copy just the reference

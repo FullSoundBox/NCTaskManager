@@ -75,8 +75,11 @@ public class TaskIO {
                     dummy.setTime(start);
                 }
 //                System.out.println(dummy);
-                tasks.add(new Task());
-                tasks.getTask(i).clone(dummy);
+                try{
+                    tasks.add(dummy.clone());
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             }
         }catch (IOException e) {
             e.printStackTrace();
