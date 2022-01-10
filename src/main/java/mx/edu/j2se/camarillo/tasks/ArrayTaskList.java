@@ -8,6 +8,12 @@ import java.util.stream.*;
 public class ArrayTaskList extends AbstractTaskList {
     private Task[] taskList = new Task[0];
 
+    public ArrayTaskList(){}
+
+    public ArrayTaskList(String taskListName){
+        this.setListName(taskListName);
+    }
+
     /**
      *
      * Looks for undefined task slot in the array, if found, rewrites the parameters of the object

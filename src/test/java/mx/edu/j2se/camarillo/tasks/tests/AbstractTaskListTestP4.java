@@ -46,9 +46,15 @@ public class AbstractTaskListTestP4 {
         arrayTaskListOne.add(taskToAdd4);
 
         //Testing incoming()
-        AbstractTaskList incomingNineToFive = arrayTaskListOne.incoming(
+        AbstractTaskList incomingNineToFive;
+//        incomingNineToFive = arrayTaskListOne.incoming(
+//                LocalDateTime.of(2021,1,1,10,0),
+//                LocalDateTime.of(2021,6,1,23,0));
+
+        incomingNineToFive = (AbstractTaskList) Tasks.incoming(arrayTaskListOne,
                 LocalDateTime.of(2021,1,1,10,0),
                 LocalDateTime.of(2021,6,1,23,0));
+
         Assert.assertEquals(ArrayTaskList.class,incomingNineToFive.getClass());
         LocalDateTime from = LocalDateTime.of(2021,1,1,10,0);
         LocalDateTime to = LocalDateTime.of(2021,6,1,23,0);
@@ -99,8 +105,13 @@ public class AbstractTaskListTestP4 {
         linkedTaskListOne.add(taskToAdd4);
 
         //Testing incoming()
-        AbstractTaskList incomingTasks = linkedTaskListOne.incoming(
-                LocalDateTime.of(2021,1,1,9,0),
+        AbstractTaskList incomingTasks;
+//        incomingTasks = linkedTaskListOne.incoming(
+//                LocalDateTime.of(2021,1,1,9,0),
+//                LocalDateTime.of(2021,1,18,23,0));
+
+        incomingTasks = (AbstractTaskList) Tasks.incoming(
+                linkedTaskListOne,LocalDateTime.of(2021,1,1,9,0),
                 LocalDateTime.of(2021,1,18,23,0));
                 
         Assert.assertEquals(LinkedTaskList.class,incomingTasks.getClass());

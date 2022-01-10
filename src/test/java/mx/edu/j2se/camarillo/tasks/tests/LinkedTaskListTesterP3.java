@@ -3,6 +3,7 @@ package mx.edu.j2se.camarillo.tasks.tests;
 import mx.edu.j2se.camarillo.tasks.LinkedTaskList;
 import mx.edu.j2se.camarillo.tasks.AbstractTaskList;
 import mx.edu.j2se.camarillo.tasks.Task;
+import mx.edu.j2se.camarillo.tasks.Tasks;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -166,9 +167,14 @@ public class LinkedTaskListTesterP3 {
         Assert.assertEquals(taskToAdd4.toString(),taskListOne.getTask(4).toString());
 
         AbstractTaskList incomingTasks;
-        incomingTasks = taskListOne.incoming(
-                LocalDateTime.of(2021,1,1,9,0),
+//        incomingTasks = taskListOne.incoming(
+//                LocalDateTime.of(2021,1,1,9,0),
+//                LocalDateTime.of(2021,1,18,23,0));
+
+        incomingTasks = (AbstractTaskList) Tasks.incoming(
+                taskListOne,LocalDateTime.of(2021,1,1,9,0),
                 LocalDateTime.of(2021,1,18,23,0));
+
         /*
         System.out.println();
         System.out.println("Hay " + incomingNineToFive.size() + " Tareas de 9 a 5");

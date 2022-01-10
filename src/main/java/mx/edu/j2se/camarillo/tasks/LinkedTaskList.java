@@ -8,6 +8,12 @@ public class LinkedTaskList extends AbstractTaskList{
     private Node first;
     private Node last;
 
+    public LinkedTaskList(){}
+
+    public LinkedTaskList(String taskListName){
+        this.setListName(taskListName);
+    }
+
     /**
      *
      * Adds a task to the last node in the linked list

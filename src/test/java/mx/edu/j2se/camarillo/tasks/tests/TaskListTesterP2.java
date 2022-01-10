@@ -3,6 +3,7 @@ package mx.edu.j2se.camarillo.tasks.tests;
 import mx.edu.j2se.camarillo.tasks.Task;
 import mx.edu.j2se.camarillo.tasks.ArrayTaskList;
 import mx.edu.j2se.camarillo.tasks.AbstractTaskList;
+import mx.edu.j2se.camarillo.tasks.Tasks;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -108,8 +109,11 @@ public class TaskListTesterP2 {
 
         AbstractTaskList incomingTasks;
 
-        incomingTasks = taskListOne.incoming(
-                LocalDateTime.of(2021,1,1,9,0),
+//        incomingTasks = taskListOne.incoming(
+//                LocalDateTime.of(2021,1,1,9,0),
+//                LocalDateTime.of(2021,1,18,23,0));
+        incomingTasks = (AbstractTaskList) Tasks.incoming(
+                taskListOne,LocalDateTime.of(2021,1,1,9,0),
                 LocalDateTime.of(2021,1,18,23,0));
 
 //        taskListOne.getStream().forEach(System.out::println);

@@ -67,12 +67,11 @@ public class TaskIO {
                 LocalDateTime start;
                 LocalDateTime end;
                 boolean repetitive = dis.readBoolean();
+                start = LocalDateTime.of(dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt());
                 if (repetitive){
-                    start = LocalDateTime.of(dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt());
                     end = LocalDateTime.of(dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt());
                     dummy.setTime(start,end,interval);
                 }else{
-                    start = LocalDateTime.of(dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt(),dis.readInt());
                     dummy.setTime(start);
                 }
 //                System.out.println(dummy);
@@ -118,13 +117,19 @@ public class TaskIO {
         final Type tipoArrayTaskList = new TypeToken<ArrayTaskList>(){}.getType();
         final Type tipoLinkedTaskList = new TypeToken<LinkedTaskList>(){}.getType();
 
-        if (bufferedReader.readLine().equals(ArrayTaskList.class.toString())){
-            String jsonInput = bufferedReader.readLine();
-            tasks.clone(gson.fromJson(jsonInput,tipoArrayTaskList));
-        }
-        else {
-            String jsonInput = bufferedReader.readLine();
-            tasks.clone(gson.fromJson(jsonInput, tipoLinkedTaskList));
+        try{
+            if (bufferedReader.readLine().equals(ArrayTaskList.class.toString())){
+                String jsonInput = bufferedReader.readLine();
+                AbstractTaskList dummy = gson.fromJson(jsonInput,tipoArrayTaskList);
+                tasks = dummy.clone();
+            }
+            else {
+                String jsonInput = bufferedReader.readLine();
+                AbstractTaskList dummy = gson.fromJson(jsonInput, tipoLinkedTaskList);
+                tasks = dummy.clone();
+            }
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
         }
         bufferedReader.close();
         in.close();

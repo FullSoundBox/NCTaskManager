@@ -27,8 +27,10 @@ public class Task implements Serializable {
 		if (time==null){throw new NullPointerException("Date is null");}
 
 		this.taskTitle = title;
-		this.startTime = time;
-		this.endTime = time;
+		this.startTime = LocalDateTime.of(
+				time.getYear(),time.getMonthValue(),time.getDayOfMonth(),time.getHour(),time.getMinute());
+		this.endTime = LocalDateTime.of(
+				time.getYear(),time.getMonthValue(),time.getDayOfMonth(),time.getHour(),time.getMinute());
 		this.taskActive = false;
 		this.taskRepeatability = false;
 	}
@@ -42,8 +44,10 @@ public class Task implements Serializable {
 		if (start.isAfter(end)) {throw new IllegalArgumentException("Start date can't be after end date");}
 
 		this.taskTitle = title;
-		this.startTime = start;
-		this.endTime = end;
+		this.startTime = LocalDateTime.of(
+				start.getYear(),start.getMonthValue(),start.getDayOfMonth(),start.getHour(),start.getMinute());
+		this.endTime = LocalDateTime.of(
+				end.getYear(),end.getMonthValue(),end.getDayOfMonth(),end.getHour(),end.getMinute());
 		this.taskInterval = interval;
 		this.taskActive = false;
 		this.taskRepeatability = true;
@@ -90,8 +94,10 @@ public class Task implements Serializable {
 	public void setTime(LocalDateTime time) throws IllegalArgumentException{
 		if (time==null){throw new NullPointerException("Time is null");}
 
-		startTime = time;
-		endTime = time;
+		startTime = LocalDateTime.of(
+				time.getYear(),time.getMonthValue(),time.getDayOfMonth(),time.getHour(),time.getMinute());
+		endTime = LocalDateTime.of(
+				time.getYear(),time.getMonthValue(),time.getDayOfMonth(),time.getHour(),time.getMinute());
 		taskInterval = 0;
 		taskRepeatability = false;
 	}
@@ -128,8 +134,10 @@ public class Task implements Serializable {
 		if (interval<=0) {throw new IllegalArgumentException("The interval of repetitive tasks should be positive");}
 		if (start.isAfter(end)) {throw new IllegalArgumentException("Start date can't be after end date");}
 
-		startTime = start;
-		endTime = end;
+		startTime = LocalDateTime.of(
+				start.getYear(),start.getMonthValue(),start.getDayOfMonth(),start.getHour(),start.getMinute());
+		endTime = LocalDateTime.of(
+				end.getYear(),end.getMonthValue(),end.getDayOfMonth(),end.getHour(),end.getMinute());
 		taskInterval = interval;
 		taskRepeatability = true;
 	}

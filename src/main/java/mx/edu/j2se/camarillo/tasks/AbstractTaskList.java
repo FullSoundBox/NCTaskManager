@@ -9,7 +9,7 @@ import java.util.Spliterator;
 import java.util.function.*;
 import java.util.stream.*;
 
-public abstract class AbstractTaskList implements Iterable<Task>, Serializable {
+public abstract class AbstractTaskList implements Cloneable, Iterable<Task>, Serializable {
     private String listName;
     public abstract void add(Task task);
     public abstract boolean remove(Task task);
@@ -24,37 +24,6 @@ public abstract class AbstractTaskList implements Iterable<Task>, Serializable {
         return this.listName;
     }
 
-    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to){
-        AbstractTaskList incomingTasks;
-        if (this.getClass()==ArrayTaskList.class)
-            incomingTasks = new ArrayTaskList();
-        else
-            incomingTasks = new LinkedTaskList();
-
-        /*
-        for (int i=0; i<this.size();i++) {
-            int j = this.getTask(i).nextTimeAfter(from);
-            if(j>=from && j<=to){incomingTasks.add(this.getTask(i));}
-        }*/
-
-        try{
-            this.getStream()
-                    .filter(task -> {
-                        //System.out.println(task);
-                        if (task.nextTimeAfter(from)!=null &&
-                                task.nextTimeAfter(from).isAfter(from) && task.nextTimeAfter(from).isBefore(to))
-                            return true;
-                        else
-                            return false;
-                    })
-                    .forEach(incomingTasks::add);
-        }catch(Exception e1){
-            //System.out.println(e1);
-        }
-
-        return incomingTasks;
-    }
-
     @Override
     public String toString(){
         String para;
@@ -65,10 +34,9 @@ public abstract class AbstractTaskList implements Iterable<Task>, Serializable {
         return para;
     }
 
-    public void clone(AbstractTaskList taskList){
-        for (Task task: taskList) {
-            this.add(task);
-        }
+    @Override
+    public AbstractTaskList clone() throws CloneNotSupportedException{
+        return (AbstractTaskList) super.clone();
     }
 
     public boolean equals(AbstractTaskList taskList){

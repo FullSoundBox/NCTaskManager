@@ -1,5 +1,6 @@
 package mx.edu.j2se.camarillo.tasks.tests;
 
+import mx.edu.j2se.camarillo.tasks.AbstractTaskList;
 import mx.edu.j2se.camarillo.tasks.ArrayTaskList;
 import mx.edu.j2se.camarillo.tasks.LinkedTaskList;
 import mx.edu.j2se.camarillo.tasks.Task;
@@ -8,7 +9,6 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
-import java.util.Spliterator;
 
 public class IteratorsServiceTesterP5 {
 
@@ -38,13 +38,6 @@ public class IteratorsServiceTesterP5 {
         taskListOne.add(taskToAdd1);
         taskListOne.add(taskToAdd2);
 
-        /*
-        System.out.println();
-        for (Iterator<Task> i2 = taskListOne.iterator(); i2.hasNext();) {
-            Task item = i2.next();
-            System.out.println(item);
-        }*/
-
         System.out.println();
         for (Task task: taskListOne) {
             System.out.println(task);
@@ -72,36 +65,11 @@ public class IteratorsServiceTesterP5 {
         Assert.assertEquals(taskToAdd1,i1.next());
         Assert.assertEquals(taskToAdd2,i1.next());
 
-        /*
-        for (Iterator<Task> i2 = taskListOne.iterator(); i2.hasNext();) {
-            System.out.println(i2.hasNext());
-            Task item = i2.next();
-            System.out.println(item);
-        }*/
-
 //        System.out.println();
         for(Task task: taskListOne){
             System.out.println(task);
         }
     }
-
-    /*
-    @Test
-    public void linkedSpliteratorTest(){
-        LinkedTaskList taskListOne = new LinkedTaskList();
-        Task taskToAdd0 = new Task("task to Add 0",7);
-        Task taskToAdd1 = new Task("task to Add 1",9,15,2);
-        Task taskToAdd2 = new Task("task to Add 2",15);
-        Task taskToAdd3 = new Task("task to Add 3",17,20,1);
-        Task taskToAdd4 = new Task("task to Add 4",18);
-        Spliterator<Task> sp1 = taskListOne.spliterator();
-
-        Assert.assertFalse(sp1.tryAdvance((task)-> System.out.println(task)));
-        taskListOne.add(taskToAdd0);
-        taskListOne.add(taskToAdd1);
-        taskListOne.add(taskToAdd2);
-        Assert.assertTrue(sp1.tryAdvance((task) -> System.out.println(task)));
-    }*/
 
     @Test
     public void taskEqualsTest(){
@@ -179,9 +147,6 @@ public class IteratorsServiceTesterP5 {
         Task taskToAdd2 = new Task("task to Add 2",
                 LocalDateTime.of(2021,1, 7,12,0));
 
-        //System.out.println(taskListOne);
-        //System.out.println();
-
         taskListOne.add(taskToAdd0);
         taskListOne.add(taskToAdd1);
         taskListOne.add(taskToAdd2);
@@ -190,9 +155,11 @@ public class IteratorsServiceTesterP5 {
 
     @Test
     public void cloneTest(){
-        ArrayTaskList taskListOne = new ArrayTaskList();
-        ArrayTaskList taskListTwo = new ArrayTaskList();
-        LinkedTaskList taskListThree = new LinkedTaskList();
+        AbstractTaskList taskListOne = new ArrayTaskList("Original Tasklist");
+
+        AbstractTaskList taskListTwo = new ArrayTaskList("ArrayTasklist copy of Original");
+        AbstractTaskList taskListThree = new LinkedTaskList("LinkedTasklist copy of Original");
+
         Task taskToAdd0 = new Task("task to Add 0",
                 LocalDateTime.of(2021,1,1,10,0));
         Task taskToAdd1 = new Task("task to Add 1",
@@ -203,10 +170,18 @@ public class IteratorsServiceTesterP5 {
         Task taskToAdd3 = new Task();
         Task taskToAdd4 = new Task();
 
+        //Trying to clone a task
         taskToAdd3.clone(taskToAdd0);
         taskToAdd4.clone(taskToAdd1);
         Assert.assertTrue(taskToAdd3.equals(taskToAdd0));
         Assert.assertTrue(taskToAdd4.equals(taskToAdd1));
+        //Verifying we didn't copy just the reference
+        taskToAdd0.setTitle("We modify the title");
+        taskToAdd0.setTime(LocalDateTime.now());
+        taskToAdd1.setTitle("We modify the title too");
+        taskToAdd1.setTime(LocalDateTime.now());
+        Assert.assertFalse(taskToAdd3.equals(taskToAdd0));//They aren't equal. Thus, they are different instances
+        Assert.assertFalse(taskToAdd4.equals(taskToAdd1));
 
         taskListOne.add(taskToAdd0);
         taskListOne.add(taskToAdd1);
@@ -214,10 +189,21 @@ public class IteratorsServiceTesterP5 {
         taskListOne.add(taskToAdd3);
         taskListOne.add(taskToAdd4);
 
-        taskListTwo.clone(taskListOne);
-        taskListThree.clone(taskListOne);
-        Assert.assertTrue(taskListTwo.equals(taskListOne));
-        Assert.assertTrue(taskListThree.equals(taskListOne));
+        try{
+            taskListTwo = taskListOne.clone();
+            taskListThree = taskListOne.clone();
+            Assert.assertTrue(taskListTwo.equals(taskListOne));
+            Assert.assertTrue(taskListThree.equals(taskListOne));
+            Assert.assertTrue(taskListTwo.equals(taskListThree));
+        }catch (CloneNotSupportedException e1){
+            //Exception e1 to be handled
+        }
+
+        //Verifying we created a new instance and not just copied the reference
+        taskListOne.setListName("modified the title");
+        taskListOne.remove(taskToAdd2);
+        Assert.assertFalse(taskListTwo.equals(taskListOne));
+        Assert.assertFalse(taskListThree.equals(taskListOne));
     }
 }
 
