@@ -59,7 +59,7 @@ public class ArrayTaskList extends AbstractTaskList {
 
     /**
      * Returns a task taken from the array taskList
-     * @param index
+     * @param index begins with 0
      * @return taskList[index]
      */
     public Task getTask(int index) throws IndexOutOfBoundsException{

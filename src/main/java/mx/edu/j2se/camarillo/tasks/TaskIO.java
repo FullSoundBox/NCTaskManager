@@ -2,12 +2,24 @@ package mx.edu.j2se.camarillo.tasks;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 
+/**
+ * This class allows working with binary serialization and JSON files. It has two types of methods, read and write.
+ * Each of these methods has as parameter: a task list to read or write on, and a Stream or File to be written to.
+ */
 public class TaskIO {
+    /**
+     * This method allows to get the tasks of a given taskList and write them in an OutputStream
+     * using this format: (Number of tasks in the list/ Length of task title/ Title of task/ isActive...
+     * .../Interval/ StartTime/ EndTime (if repetitive) ) this for each task in the list
+     * @param tasks could be an ArrayTaskList or a LinkedTaskList
+     * @param out OutputStream to be written to
+     * @throws IOException if file couldn't be opened, or it reached EOF
+     * @author Abraham Camarillo
+     */
     public static void writeBinary(AbstractTaskList tasks, OutputStream out) throws IOException{
         DataOutputStream dos = new DataOutputStream(out);
         try{
@@ -43,6 +55,14 @@ public class TaskIO {
         dos.close();
     }
 
+    /**
+     * Reads a binary stream with the format used in {@link #writeBinary(AbstractTaskList tasks, OutputStream out)}
+     * and writes the tasks in the task list
+     * @param tasks could be an ArrayTaskList or a LinkedTaskList
+     * @param in OutputStream to be read from
+     * @throws IOException if file couldn't be opened, or it reached EOF
+     * @author Abraham Camarillo
+     */
     public static void readBinary(AbstractTaskList tasks, InputStream in) throws IOException{
         DataInputStream dis = new DataInputStream(in);
 
@@ -87,18 +107,40 @@ public class TaskIO {
         dis.close();
     }
 
+    /**
+     * Writes a binary stream to the specified file with the tasklist given, using the format described in
+     * {@link #writeBinary(AbstractTaskList tasks, OutputStream out)}
+     * @param tasks tasklist to get the tasks from
+     * @param file where the tasks will be written
+     * @throws IOException if file couldn't be opened, or it reached EOF
+     * @author Abraham Camarillo
+     */
     public static void write(AbstractTaskList tasks, File file) throws IOException{
         OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
         writeBinary(tasks,outputStream);
         outputStream.close();
     }
 
+    /**
+     * Reads a file and adds the tasks within it to the task list given.
+     * @param tasks task list to be written
+     * @param file to bew read from
+     * @throws IOException if file couldn't be opened, or it reached EOF
+     * @author Abraham Camarillo
+     */
     public static void read(AbstractTaskList tasks, File file) throws IOException{
         InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         readBinary(tasks,inputStream);
         inputStream.close();
     }
 
+    /**
+     * Writes tasks from the list to the stream in the JSON format
+     * @param tasks task list to be read
+     * @param out stream to be written to
+     * @throws IOException if the file couldn't be opened or reached EOF
+     * @author Abraham Camarillo
+     */
     public static void write(AbstractTaskList tasks, Writer out) throws IOException{
         final Gson gson = new Gson();
         BufferedWriter bufferedWriter = new BufferedWriter(out);
@@ -114,6 +156,14 @@ public class TaskIO {
         bufferedWriter.close();
         out.close();
     }
+
+    /**
+     * Reads tasks from the JSON stream to the list.
+     * @param tasks to be written to
+     * @param in stream to be read from
+     * @throws IOException if the file couldn't be opened or reached EOF
+     * @author Abraham Camarillo
+     */
     public static void read(AbstractTaskList tasks, Reader in) throws IOException{
         final Gson gson = new Gson();
         BufferedReader bufferedReader = new BufferedReader(in);
@@ -138,9 +188,24 @@ public class TaskIO {
         in.close();
     }
 
+    /**
+     * Writes tasks to the file in JSON format
+     * @param tasks task list to be read
+     * @param file where the tasks will be written
+     * @throws IOException if the file couldn't be opened or reached EOF
+     * @author Abraham Camarillo
+     */
     public static void writeText(AbstractTaskList tasks, File file) throws IOException {
         write(tasks,new FileWriter(file));
     }
+
+    /**
+     * reads tasks from the JSON file and writes them to the task list
+     * @param tasks task list to be written
+     * @param file to read from
+     * @throws IOException if the file couldn't be opened or reached EOF
+     * @author Abraham Camarillo
+     */
     public static void readText(AbstractTaskList tasks, File file) throws IOException{
         read(tasks,new FileReader(file));
     }

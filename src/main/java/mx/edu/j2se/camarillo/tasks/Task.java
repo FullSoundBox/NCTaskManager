@@ -2,6 +2,13 @@ package mx.edu.j2se.camarillo.tasks;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * This class will be the basic unit of this project. Tasks have some descriptive test
+ * that tells us details about it. They can be active or un-active, and they have a startTime and
+ * an endTime. Also, tasks can be repetitive or non-repetitive. Further we implement methods to
+ * work with tasks execution times and to manipulate them.
+ * @author Abraham Camarillo
+ */
 public class Task implements Serializable, Cloneable {
 	private String taskTitle;
 	private LocalDateTime startTime;
@@ -22,6 +29,8 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Creates a non-repetitive, un-active task.
+	 * @param time use a LocalDateTime with this format (YYYY/MM/DD/HH/MM)
+	 * @autor Abraham Camarillo
 	 */
 	public Task(String title, LocalDateTime time){
 		if (time==null){throw new NullPointerException("Date is null");}
@@ -37,6 +46,10 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Creates a repetitive, un-active task
+	 * @param start use a LocalDateTime with this format (YYYY/MM/DD/HH/MM)
+	 * @param end use a LocalDateTime with this format (YYYY/MM/DD/HH/MM)
+	 * @param interval represented in hours
+	 * @author Abraham Camarillo
 	 */
 	public Task(String title, LocalDateTime start, LocalDateTime end, long interval) throws IllegalArgumentException{
 		if (start==null || end==null) {throw new NullPointerException("Dates can't be null");}
@@ -55,6 +68,8 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Returns the task title
+	 * @return String with the task title in no specific format
+	 * @author Abraham Camarillo
 	 */
 	public String getTitle() {
 		return taskTitle;
@@ -62,6 +77,7 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Sets the task title.
+	 * @author Abraham Camarillo
 	 */
 	public void setTitle(String title) {
 		taskTitle = title;
@@ -69,6 +85,8 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Tells if the task is active or not
+	 * @return boolean value if the task is to be executed or not
+	 * @author Abraham Camarillo
 	 */
 	public boolean isActive() {
 		return taskActive;
@@ -76,12 +94,15 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Sets the state of the tasks. Parameter may be true or false.
+	 * @author Abraham Camarillo
 	 */
 	public void setActive(boolean active) { taskActive = active; }
 
 	/**
 	 * Returns the time of the non-repetitive task. If it is repetitive,
 	 * returns the start time of the task.
+	 * @return LocalDateTime object with the format (YYYY/MM/DD/HH/MM)
+	 * @author Abraham Camarillo
 	 */
 	public LocalDateTime getTime() {
 		return startTime;
@@ -90,6 +111,8 @@ public class Task implements Serializable, Cloneable {
 	/**
 	 * Sets the time of the non-repetitive task. If it is repetitive, the task is turned into
 	 * a non-repetitive task.
+	 * @throws IllegalArgumentException
+	 * @author Abraham Camarillo
 	 */
 	public void setTime(LocalDateTime time) throws IllegalArgumentException{
 		if (time==null){throw new NullPointerException("Time is null");}
@@ -105,6 +128,8 @@ public class Task implements Serializable, Cloneable {
 	/**
 	 * Returns the start time of a repetitive task. If it's a non-repetitive task
 	 * it returns the time of the task.
+	 * @return LocalDateTime object with the format (YYYY/MM/DD/HH/MM)
+	 * @author Abraham Camarillo
 	 */
 	public LocalDateTime getStartTime() {
 		return startTime;
@@ -128,6 +153,7 @@ public class Task implements Serializable, Cloneable {
 	/**
 	 * Sets the start and end time, and also the repetition interval of a repetitive task.
 	 * If it is a non-repetitive task, it's turned into a repetitive task.
+	 * @throws IllegalArgumentException if startTime is after endTime or if interval is not positive
 	 */
 	public void setTime(LocalDateTime start, LocalDateTime end, long interval) throws IllegalArgumentException{
 		if (start==null || end==null) {throw new NullPointerException("Dates can't be null");}
@@ -183,6 +209,12 @@ public class Task implements Serializable, Cloneable {
 		}
 	}
 
+	/**
+	 * Determines if two tasks are equal, that is to say, they have identical parameters
+ 	 * @param task Not null task to compare
+	 * @return true if they have the same parameters, false if one of them is not equal
+	 * @author Abraham Camarillo
+	 */
 	public boolean equals(Task task){
 		if(task==null) throw new NullPointerException("Task to compare is null");
 
@@ -194,6 +226,10 @@ public class Task implements Serializable, Cloneable {
 		this.taskRepeatability==task.isRepeated());
 	}
 
+	/**
+	 * Generate a hashCode using the title of the task
+	 * @return integer value based on the task title
+	 */
 	@Override
 	public int hashCode(){
 		return this.getTitle().hashCode();
@@ -201,6 +237,7 @@ public class Task implements Serializable, Cloneable {
 
 	/**
 	 * Copies the parameters of another object
+	 * @return clone of the task
 	 */
 	@Override
 	public Task clone() throws CloneNotSupportedException {
@@ -208,8 +245,9 @@ public class Task implements Serializable, Cloneable {
 	}
 
 	/**
-	 *
-	 * Prints the parameters of the object
+	 * Generates a string with the parameters of the Task
+	 * @return a string with this format (Title/ StartTime/ EndTime/ Interval/ isActive/ isRepetitive)
+	 * @author Abraham Camarillo
 	 */
 	public String toString(){
 		String para;
